@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loyaltie — The Future of Local Commerce</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #DC541E;
+  --orange-light: #F5C5B0;
+  --orange-pale: #FEF0E8;
+  --teal: #003739;
+  --teal-mid: #1A5254;
+  --teal-light: #D8E8E8;
+  --bg: #F8F6F0;
+  --white: #FFFFFF;
+  --muted: #6B7E7F;
+  --border: #E2DDD6;
+  --dark: #002628;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--teal);
+  color: var(--teal);
+}
+
+/* ── SLIDE CONTAINER ── */
+#deck {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+}
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 72px 80px 100px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  transform: translateY(24px);
+  overflow: hidden;
+}
+.slide.active {
+  opacity: 1; pointer-events: auto; transform: translateY(0);
+}
+.slide-dark  { background: var(--teal); }
+.slide-light { background: var(--bg); }
+.slide-white { background: var(--white); }
+.slide-orange { background: var(--orange); }
+
+/* ── BOTTOM NAV (matching screenshot) ── */
+#nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  height: 60px;
+  display: flex; align-items: center;
+  padding: 0 40px;
+}
+/* nav bg matches current slide color */
+#nav.dark  { background: var(--dark); }
+#nav.light { background: rgba(248,246,240,0.95); backdrop-filter: blur(8px); }
+#nav.white { background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); }
+#nav.orange-nav { background: rgba(180,60,10,0.95); }
+
+.nav-left { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.35); letter-spacing: 0.05em; }
+.nav-left-light { color: var(--muted); }
+
+.nav-center {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 14px;
+}
+.nav-arrow {
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.5); font-size: 16px; padding: 6px;
+  transition: color 0.2s; line-height: 1;
+}
+.nav-arrow:hover { color: #fff; }
+.nav-arrow-light { color: var(--muted); }
+.nav-arrow-light:hover { color: var(--teal); }
+
+.nav-dots { display: flex; align-items: center; gap: 6px; }
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 4px;
+  background: rgba(255,255,255,0.25);
+  transition: all 0.3s; cursor: pointer; border: none;
+}
+.nav-dot.active {
+  width: 28px; background: var(--orange);
+}
+.nav-dot-light { background: rgba(0,55,57,0.18); }
+.nav-dot-light.active { background: var(--orange); }
+
+.nav-count-right {
+  margin-left: auto; font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.4);
+}
+.nav-count-right-light { color: var(--muted); }
+
+/* ── TYPOGRAPHY ── */
+.eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--orange); margin-bottom: 16px;
+}
+.eyebrow-dim { color: rgba(255,255,255,0.4); }
+.display {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 800; line-height: 1.06; letter-spacing: -0.02em;
+}
+.d-xl { font-size: clamp(46px, 6vw, 72px); }
+.d-lg { font-size: clamp(34px, 4.5vw, 52px); }
+.d-md { font-size: clamp(24px, 3vw, 38px); }
+.d-sm { font-size: clamp(20px, 2.5vw, 30px); }
+.c-white { color: #fff; }
+.c-orange { color: var(--orange); }
+.c-teal { color: var(--teal); }
+.c-muted { color: var(--muted); }
+.body { font-size: 13.5px; line-height: 1.65; color: var(--muted); }
+.body-white { color: rgba(255,255,255,0.6); }
+.body-sm { font-size: 12px; line-height: 1.6; color: var(--muted); }
+.label-sm { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+
+/* ── LAYOUT ── */
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.cols-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.cols-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--white); border-radius: 16px; padding: 26px;
+  box-shadow: 0 2px 16px rgba(0,55,57,0.07), 0 0 0 1px rgba(0,55,57,0.04);
+}
+.card-dark { background: var(--dark); border-radius: 14px; padding: 24px; }
+.card-t { border-top: 3px solid var(--orange); }
+.card-l { border-left: 4px solid var(--orange); }
+.rule-o { width: 44px; height: 2px; background: var(--orange); margin-bottom: 20px; }
+
+/* ── STAT BOXES ── */
+.stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+.stat-box {
+  background: var(--white); border-radius: 14px; padding: 22px 16px 18px;
+  border-top: 3px solid var(--orange);
+  box-shadow: 0 2px 12px rgba(0,55,57,0.06); text-align: center;
+}
+.stat-n {
+  font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 800;
+  color: var(--orange); line-height: 1; margin-bottom: 7px;
+}
+.stat-l { font-size: 11px; font-weight: 600; color: var(--muted); line-height: 1.4; }
+
+/* ── CHECK ITEMS ── */
+.ci { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+.ci-mark {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+  border: 2px solid var(--orange); color: var(--orange);
+  display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;
+}
+.ci-fill { background: var(--orange); color: #fff; border-color: var(--orange); }
+.ci-title { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 2px; }
+.ci-title-w { color: #fff; }
+.ci-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.ci-desc-w { color: rgba(255,255,255,0.55); }
+
+/* ── VALUE STACK ── */
+.vs-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.09);
+}
+.vs-item:last-child { border-bottom: none; }
+.vs-tick {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2px solid var(--orange); color: var(--orange);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; flex-shrink: 0;
+}
+.vs-text { font-size: 13px; color: rgba(255,255,255,0.82); line-height: 1.45; padding-top: 2px; }
+
+/* ── FUNNEL ── */
+.funnel-step {
+  border-radius: 8px; display: flex; align-items: center;
+  padding: 11px 20px; gap: 16px; margin-bottom: 7px;
+}
+.f-lbl { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; color: #fff; text-transform: uppercase; min-width: 76px; }
+.f-desc { font-size: 12px; color: rgba(255,255,255,0.72); }
+
+/* ── AGENT CARDS ── */
+.agent-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.ac {
+  background: var(--dark); border-radius: 12px; padding: 20px;
+  border-top: 3px solid var(--orange);
+}
+.ac-icon { font-size: 20px; margin-bottom: 10px; }
+.ac-title { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.ac-desc { font-size: 11px; color: rgba(255,255,255,0.48); line-height: 1.5; }
+
+/* ── COMP TABLE ── */
+.ct { width: 100%; border-collapse: collapse; }
+.ct th {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); padding: 10px 16px; text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+.ct th:last-child { color: var(--orange); }
+.ct td { padding: 13px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.ct tr:last-child td { border-bottom: none; }
+.ct tr:nth-child(even) td { background: rgba(0,55,57,0.02); }
+.ct-name { font-weight: 700; color: var(--teal); }
+.ct-their { color: var(--muted); }
+.ct-ours { font-weight: 600; color: var(--teal); }
+
+/* ── PROJ ROWS ── */
+.pr {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.pr:last-child { border-bottom: none; }
+.pr-l { font-size: 12px; color: rgba(255,255,255,0.55); }
+.pr-v { font-size: 13px; font-weight: 700; color: var(--orange-light); }
+.pr-v-big { font-size: 18px; font-weight: 800; color: var(--orange); font-family: 'Playfair Display',serif; }
+
+/* ── CAC BAR ── */
+.cac-wrap { display: flex; align-items: flex-end; gap: 10px; height: 130px; padding-top: 28px; }
+.cac-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.cac-bar {
+  width: 100%; border-radius: 5px 5px 0 0; position: relative;
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 5px;
+}
+.cac-val-out { font-size: 10px; font-weight: 700; color: var(--teal); margin-bottom: 3px; }
+.cac-mon { font-size: 9.5px; font-weight: 600; color: var(--muted); margin-top: 5px; }
+.best-tag {
+  position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+  background: var(--orange); color: #fff; font-size: 7.5px; font-weight: 800;
+  padding: 2px 5px; border-radius: 3px; white-space: nowrap;
+}
+/* LTV BARS */
+.ltv-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.ltv-lbl { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.75); width: 64px; flex-shrink: 0; }
+.ltv-track { flex: 1; height: 34px; background: var(--dark); border-radius: 7px; overflow: hidden; }
+.ltv-fill { height: 100%; border-radius: 7px; display: flex; align-items: center; padding: 0 10px; gap: 8px; }
+.ltv-pct { font-size: 11px; font-weight: 700; color: #fff; }
+.ltv-badge { margin-left: auto; background: rgba(0,0,0,0.22); border-radius: 3px; padding: 1px 6px; font-size: 9.5px; font-weight: 700; color: var(--orange-light); }
+.ltv-aside { font-size: 10.5px; font-weight: 700; color: rgba(255,255,255,0.4); width: 32px; text-align: right; flex-shrink: 0; }
+
+/* ── DECO ── */
+.dc { position: absolute; border-radius: 50%; pointer-events: none; }
+.left-rule { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--orange); }
+.phase-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(220,84,30,0.15); border: 1px solid rgba(220,84,30,0.3);
+  color: var(--orange); font-size: 10px; font-weight: 700;
+  padding: 4px 10px; border-radius: 20px; letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+.phase-tag-dim { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+<!-- ═══════ S1: COVER ═══════ -->
+<section class="slide slide-dark active" data-nav="dark" data-label="Cover">
+  <div class="left-rule"></div>
+  <div class="dc" style="width:460px;height:460px;background:rgba(26,82,84,0.45);top:-110px;right:-90px;"></div>
+  <div class="dc" style="width:240px;height:240px;background:rgba(220,84,30,0.1);bottom:-50px;left:-50px;"></div>
+  <div style="position:relative;z-index:2;max-width:780px;">
+    <div class="eyebrow" style="margin-bottom:24px;">LOYALTIE &nbsp;·&nbsp; INVESTOR OVERVIEW &nbsp;·&nbsp; 2026</div>
+    <h1 class="display d-xl c-white">The Future of<br><em class="c-orange">Local Commerce</em></h1>
+    <div class="rule-o" style="margin-top:32px;"></div>
+    <p style="font-size:16px;font-style:italic;color:rgba(255,255,255,0.55);font-family:'Playfair Display',serif;margin-top:4px;">Powered by AI. Built on human connection.</p>
+    <p style="font-size:12px;color:rgba(255,255,255,0.28);letter-spacing:0.06em;margin-top:32px;">Buy local, wherever you are. &nbsp;·&nbsp; loyaltie.com</p>
+  </div>
+</section>
+
+<!-- ═══════ S2: THE PROBLEM ═══════ -->
+<section class="slide slide-light" data-nav="light" data-label="Problem">
+  <div class="dc" style="width:320px;height:320px;background:rgba(220,84,30,0.05);bottom:-60px;right:-60px;"></div>
+  <div class="eyebrow">The Problem</div>
+  <h2 class="display d-lg c-teal" style="margin-bottom:28px;">The way people discover<br>and buy local is broken.</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="card card-t" style="padding:22px;">
+      <div style="font-size:22px;margin-bottom:10px;">🏪</div>
+      <h3 style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:7px;">An explosion of independent brands — nowhere to be found</h3>
+      <p class="body-sm">Tens of thousands of independent brands and local makers are trying to sell online — Shopify's growth tells the story. But there is no single point of discovery. Those already selling face brutal CAC, no recurring revenue tools, and no platform built to solve it.</p>
+    </div>
+    <div class="card card-t" style="padding:22px;">
+      <div style="font-size:22px;margin-bottom:10px;">🧡</div>
+      <h3 style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:7px;">Buyers care about local — but convenience wins</h3>
+      <p class="body-sm">People want to buy from real humans. They care about quality and story. But they're not limited to what retailers stock wholesale. They want one place to find it all, with the brands they actually love — not what a retailer decided to carry.</p>
+    </div>
+    <div class="card card-t" style="padding:22px;">
+      <div style="font-size:22px;margin-bottom:10px;">📦</div>
+      <h3 style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:7px;">The market is fragmented — and shipping is the tax</h3>
+      <p class="body-sm">Buying from multiple independent brands today means multiple carts, multiple accounts, multiple shipping fees. If you love a coffee brand in Portland and a skincare brand in Austin, you pay to ship from both — separately. That friction kills the habit. Loyaltie covers shipping across every brand, every order, from one account.</p>
+    </div>
+    <div class="card card-t" style="padding:22px;">
+      <div style="font-size:22px;margin-bottom:10px;">🤖</div>
+      <h3 style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:7px;">Shopping in the AI era is changing</h3>
+      <p class="body-sm">We still want the human connection and the reason to buy — but we expect a simple AI assistant to find and do it for us. Local commerce hasn't caught up. The old shopping experience doesn't fit the way people want to shop today.</p>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:12px;font-style:italic;color:var(--muted);margin-top:16px;font-family:'Playfair Display',serif;">The gap between great independent products and the people who want them has never been bigger.</p>
+</section>
+
+<!-- ═══════ S3: OUR SOLUTION (buyer-first) ═══════ -->
+<section class="slide slide-dark" data-nav="dark" data-label="Solution">
+  <div class="dc" style="width:400px;height:400px;background:rgba(26,82,84,0.5);top:-100px;right:-80px;"></div>
+  <div class="cols-2" style="align-items:center;gap:56px;">
+    <div>
+      <div class="eyebrow eyebrow-dim">For Buyers</div>
+      <h2 class="display d-lg c-white" style="margin-bottom:20px;">Buy local,<br><em class="c-orange">wherever you are.</em></h2>
+      <p style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:28px;">One place to discover, buy, and make local your regular — from the best independent brands across the US. Know the maker. Trust what's in it. Never run out.</p>
+      <div class="rule-o"></div>
+      <p style="font-size:12px;font-weight:700;color:var(--orange);letter-spacing:0.04em;">The quality of buying local. The convenience of online shopping.<br>The confidence of Loyaltie backing every purchase.</p>
+    </div>
+    <div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text">Discover the best independent brands in the country — curated, quality-first, never mass-produced.</div>
+      </div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text">Buy directly from the maker — know who made it, where it's from, and why it exists.</div>
+      </div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text">Make it a regular — buy on a plan, never run out, set it and forget it.</div>
+      </div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text">AI-assisted discovery — your personal shopping agent finds the right product for you.</div>
+      </div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text">Message the maker directly — ask questions, get recommendations, build a real relationship.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ S4: LOYALTIE+ ═══════ -->
+<section class="slide slide-dark" data-nav="dark" data-label="Loyaltie+">
+  <div class="dc" style="width:380px;height:380px;background:rgba(220,84,30,0.08);top:-80px;right:-80px;"></div>
+  <div style="background:var(--orange);margin:-72px -80px 32px;padding:18px 80px;display:flex;align-items:center;gap:20px;">
+    <h2 class="display d-md" style="color:#fff;margin:0;">LOYALTIE+</h2>
+    <p style="font-size:14px;font-style:italic;color:rgba(255,255,255,0.82);font-family:'Playfair Display',serif;margin:0;">The membership that makes buying local as easy — and as free — as buying from Amazon.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;">
+
+    <!-- Left: solves the problems -->
+    <div>
+      <div class="label-sm" style="color:rgba(255,255,255,0.35);margin-bottom:14px;">How it solves the problems we showed</div>
+      <div class="card-dark card-l" style="margin-bottom:12px;padding:16px 20px;">
+        <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:5px;">📦 Fixes fragmentation &amp; shipping</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.55;">One membership covers free shipping across every independent brand on Loyaltie — US-wide today, global next. Order from five brands in five states. One account. Zero shipping fees.</div>
+      </div>
+      <div class="card-dark card-l" style="margin-bottom:12px;padding:16px 20px;">
+        <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:5px;">🛡️ Purchase protection on every order</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.55;">Loyaltie backs every purchase. If something goes wrong with any order from any maker, members are covered. Trust, not just discovery.</div>
+      </div>
+      <div class="card-dark card-l" style="padding:16px 20px;">
+        <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:5px;">🤖 Personal AI shopping assistant</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.55;">A dedicated assistant that knows your tastes, your household, and your regulars. Finds the right product, from the right maker, at the right time — without you searching.</div>
+      </div>
+    </div>
+
+    <!-- Right: member benefits -->
+    <div>
+      <div class="label-sm" style="color:rgba(255,255,255,0.35);margin-bottom:14px;">All member benefits</div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text"><strong style="color:#fff;">Free shipping</strong> on every order from every brand — no minimums, no exceptions.</div>
+      </div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text"><strong style="color:#fff;">Purchase protection</strong> — Loyaltie backs every order. If it goes wrong, we make it right.</div>
+      </div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text"><strong style="color:#fff;">Personal AI assistant</strong> — your shopping agent, tuned to your taste and your household.</div>
+      </div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text"><strong style="color:#fff;">Unique &amp; exclusive products</strong> — member-only drops and limited items from makers that never go to retail.</div>
+      </div>
+      <div class="vs-item">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text"><strong style="color:#fff;">Free discovery products</strong> — curated samples from new makers sent with your orders so you discover without risk.</div>
+      </div>
+      <div class="vs-item" style="border-bottom:none;">
+        <div class="vs-tick">✓</div>
+        <div class="vs-text"><strong style="color:#fff;">Loyalty status &amp; rewards</strong> — physical milestone packages as you support more makers across the US.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════ S5: BUYER ACQUISITION ═══════ -->
+<section class="slide slide-dark" data-nav="dark" data-label="Buyer Acquisition">
+  <div class="dc" style="width:320px;height:320px;background:rgba(220,84,30,0.07);top:-60px;right:-60px;"></div>
+  <div class="eyebrow eyebrow-dim">How We Find Buyers</div>
+  <h2 class="display d-md c-white" style="margin-bottom:28px;">Multi-channel. AI-driven.<br><em class="c-orange">Always on.</em></h2>
+  <div class="cols-2" style="gap:36px;align-items:start;">
+    <div>
+      <div class="label-sm" style="color:rgba(255,255,255,0.35);margin-bottom:12px;">Paid Acquisition — AI-Powered</div>
+      <div class="card-dark card-t" style="margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:700;color:var(--orange);margin-bottom:8px;">📦 PRODUCT CATALOG AGENTS</div>
+        <p class="body-sm body-white">AI agents scan all products, identify top performers, and split them into two tracks: <strong style="color:#fff;">high-budget catalog ads</strong> for proven products and <strong style="color:#fff;">automated individual product ads</strong> with AI-generated visuals and copy — launched without manual effort.</p>
+      </div>
+      <div class="card-dark card-t" style="margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:700;color:var(--orange);margin-bottom:8px;">🔍 GOOGLE SEARCH + SEO AGENTS</div>
+        <p class="body-sm body-white">Organic search positions across every product, category, and maker. Agents manage schema markup, content enrichment, and category hub pages — ensuring Loyaltie surfaces for every local product search.</p>
+      </div>
+      <div class="card-dark card-t">
+        <div style="font-size:11px;font-weight:700;color:var(--orange);margin-bottom:8px;">💬 COMMUNITY AGENTS</div>
+        <p class="body-sm body-white">AI agents identify and respond to relevant conversations across Reddit, Facebook Groups, and Instagram — placing Loyaltie and specific makers organically where buyers are already searching for recommendations.</p>
+      </div>
+    </div>
+    <div>
+      <div class="label-sm" style="color:rgba(255,255,255,0.35);margin-bottom:12px;">Full Acquisition Funnel</div>
+      <div class="funnel-step" style="background:var(--teal-mid);">
+        <div class="f-lbl">Reach</div>
+        <div class="f-desc">Meta catalog ads · Google · Community agents · Organic SEO</div>
+      </div>
+      <div class="funnel-step" style="background:#1E6668;width:92%;margin-left:4%;">
+        <div class="f-lbl">Engage</div>
+        <div class="f-desc">Problem-specific ads · AI-generated creative · UGC content</div>
+      </div>
+      <div class="funnel-step" style="background:var(--orange);width:82%;margin-left:9%;">
+        <div class="f-lbl">Convert</div>
+        <div class="f-desc">Discovery landing pages · Free gift at signup · AI matching</div>
+      </div>
+      <div class="funnel-step" style="background:#B84010;width:68%;margin-left:16%;">
+        <div class="f-lbl">Retain</div>
+        <div class="f-desc">Email agents · Replenishment · Loyaltie+</div>
+      </div>
+      <div style="margin-top:18px;font-size:10px;font-style:italic;color:rgba(255,255,255,0.3);">Ad framework: Pain → Product Solution → Local Advantage → Loyaltie Advantage → Buy local, wherever you are.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ S5: AI TECHNOLOGY ═══════ -->
+<section class="slide slide-dark" data-nav="dark" data-label="AI Platform">
+  <div class="dc" style="width:360px;height:360px;background:rgba(220,84,30,0.07);top:-80px;right:-80px;"></div>
+  <div class="eyebrow eyebrow-dim">Technology</div>
+  <h2 class="display d-md c-white" style="margin-bottom:6px;">Everything is AI-powered.</h2>
+  <h2 class="display d-md c-orange" style="margin-bottom:16px;">Except the human connection.</h2>
+  <p style="font-size:12px;font-style:italic;color:rgba(255,255,255,0.35);margin-bottom:26px;">May 2026: Loyaltie transitions to fully agentic development — every feature built, tested, and shipped by AI agents.</p>
+  <div class="agent-grid">
+    <div class="ac"><div class="ac-icon">🔍</div><div class="ac-title">Discovery Agent</div><div class="ac-desc">Daily personalised product feeds. Powers 'Try These Today'. Learns from every interaction.</div></div>
+    <div class="ac"><div class="ac-icon">📦</div><div class="ac-title">Catalog Performance Agent</div><div class="ac-desc">Identifies top-performing products. Auto-creates Meta catalog ads and individual product creatives.</div></div>
+    <div class="ac"><div class="ac-icon">💬</div><div class="ac-title">Community Agent</div><div class="ac-desc">Finds relevant Reddit, Facebook & Instagram conversations. Places organic recommendations at scale.</div></div>
+    <div class="ac"><div class="ac-icon">🛍️</div><div class="ac-title">Shopping Assistant Agent</div><div class="ac-desc">AI-powered "Help me choose" on every PDP. Reduces decision friction. Lifts conversion.</div></div>
+    <div class="ac"><div class="ac-icon">🤖</div><div class="ac-title">Seller Recruitment Agent</div><div class="ac-desc">Instagram Graph API screening, personalised DM outreach, and Shopify auto-onboarding at scale.</div></div>
+    <div class="ac"><div class="ac-icon">🔄</div><div class="ac-title">Replenishment Agent</div><div class="ac-desc">Predicts when buyers run low. Re-engages before they churn. Suggests subscription upgrade.</div></div>
+  </div>
+</section>
+
+<!-- ═══════ S6: SELLER (compact) ═══════ -->
+<section class="slide slide-light" data-nav="light" data-label="For Sellers">
+  <div class="eyebrow">For Sellers</div>
+  <div class="cols-2" style="gap:48px;align-items:start;">
+    <div>
+      <h2 class="display d-md c-teal" style="margin-bottom:20px;">The D2C growth channel<br>independent brands need.</h2>
+      <p class="body" style="margin-bottom:24px;">Loyaltie is a new audience for sellers — working alongside their existing Shopify store. AI handles acquisition, discovery, and content. Sellers focus on making great products.</p>
+      <div class="ci"><div class="ci-mark ci-fill">✓</div><div><div class="ci-title">Sell more, sell directly</div><div class="ci-desc">Reach high-intent buyers already looking to buy local. No algorithm controlling visibility.</div></div></div>
+      <div class="ci"><div class="ci-mark ci-fill">✓</div><div><div class="ci-title">Turn buyers into regulars</div><div class="ci-desc">Native recurring purchase plans. No third-party apps. Set a frequency, set a discount, done.</div></div></div>
+      <div class="ci"><div class="ci-mark ci-fill">✓</div><div><div class="ci-title">Pay only for results</div><div class="ci-desc">We only charge when you gain a customer or receive an order. Never before.</div></div></div>
+      <div class="ci"><div class="ci-mark ci-fill">✓</div><div><div class="ci-title">AI-powered store & catalog</div><div class="ci-desc">AI-generated titles, descriptions, images, and attributes. Syncs with Shopify automatically.</div></div></div>
+    </div>
+    <div>
+      <div class="label-sm c-muted" style="margin-bottom:14px;">Seller Acquisition — Two Paths</div>
+      <div class="card card-t" style="margin-bottom:14px;">
+        <div style="font-size:9.5px;font-weight:700;letter-spacing:0.15em;color:var(--orange);margin-bottom:8px;">PATH A — INBOUND</div>
+        <p class="body-sm">Meta ads targeting Shopify sellers as pre-qualified audience. Landing page → AI store sync. Headline: <em>"Your Shopify store has one audience. Loyaltie gives you another."</em></p>
+      </div>
+      <div class="card card-t">
+        <div style="font-size:9.5px;font-weight:700;letter-spacing:0.15em;color:var(--orange);margin-bottom:8px;">PATH B — OUTBOUND AGENT</div>
+        <p class="body-sm">Instagram Graph API screens and identifies potential sellers. Agent sends personalised DMs. Loyaltie API auto-onboards approved stores. Shopify bidirectional order sync on acceptance.</p>
+      </div>
+      <p style="font-size:11px;font-style:italic;color:var(--muted);margin-top:14px;text-align:center;">Target: established Shopify stores with products already selling online.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ S7: TRACTION (2 phases) ═══════ -->
+<section class="slide slide-light" data-nav="light" data-label="Traction">
+  <div class="eyebrow">Traction &amp; Data</div>
+  <h2 class="display d-md c-teal" style="margin-bottom:20px;">Two test phases.<br><em class="c-orange">Improving every month.</em></h2>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
+
+    <!-- Phase 1 -->
+    <div class="card" style="border-top:3px solid var(--teal);padding:20px;">
+      <div class="phase-tag" style="margin-bottom:8px;">PHASE 1 — Jan → Mar 2026</div>
+      <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:5px;">Single-store funnel optimisation</div>
+      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;margin-bottom:14px;">One store to optimise the purchase funnel, product pages, and paid acquisition. Goal: establish CAC benchmark before marketplace scaling.</div>
+
+      <!-- 4 stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;">
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--orange);">267</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;line-height:1.3;">Buyers<br>Jan–Mar</div>
+        </div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--orange);">$115</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;line-height:1.3;">Best CAC<br>March</div>
+        </div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--orange);">$37</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;line-height:1.3;">Avg<br>order value</div>
+        </div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--orange);">88%</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;line-height:1.3;">CAC drop<br>Jan→Mar</div>
+        </div>
+      </div>
+
+      <!-- CAC bars Jan–Mar -->
+      <div style="font-size:9.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">CAC Optimisation</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:64px;" id="cacP1"></div>
+      <div style="font-size:10px;font-weight:700;color:var(--orange);margin-top:8px;">★ $229 → $115 in 3 months via funnel &amp; creative optimisation</div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="card" style="border-top:3px solid var(--orange);padding:20px;">
+      <div class="phase-tag" style="margin-bottom:8px;">PHASE 2 — Apr → May 2026</div>
+      <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:5px;">Marketplace launch — 100+ stores</div>
+      <div style="font-size:11.5px;color:var(--muted);line-height:1.55;margin-bottom:14px;">April: expanded to multiple stores, rebuilt marketplace funnels. CAC rose — expected when replacing optimised single-store flows. May: funnels stabilising fast.</div>
+
+      <!-- 4 stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;">
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--orange);">100+</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;line-height:1.3;">Stores<br>live</div>
+        </div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--orange);">~60</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;line-height:1.3;">Stores<br>with orders</div>
+        </div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--orange);">250</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;line-height:1.3;">Buyers<br>Apr+May</div>
+        </div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--orange);">↓</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;line-height:1.3;">CAC<br>improving</div>
+        </div>
+      </div>
+
+      <!-- Apr + May CAC bars -->
+      <div style="font-size:9.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">CAC — Marketplace Funnels</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:48px;margin-bottom:12px;" id="cacP2"></div>
+
+      <!-- signals -->
+      <div style="background:var(--teal);border-radius:10px;padding:12px 14px;">
+        <div style="font-size:9.5px;font-weight:700;letter-spacing:0.15em;color:var(--orange);margin-bottom:7px;">MARKETPLACE SIGNALS</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.7);line-height:1.8;">
+          🔍 &nbsp;Buyers exploring multiple stores — discovery intent confirmed<br>
+          🔄 &nbsp;Return visits with no paid trigger — organic pull<br>
+          📈 &nbsp;Cross-maker exploration grows with product catalogue
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════ S9: BUSINESS MODEL ═══════ -->
+<section class="slide slide-white" data-nav="light" data-label="Business Model">
+  <div class="eyebrow">Business Model</div>
+  <h2 class="display d-md c-teal" style="margin-bottom:36px;">Two compounding<br>revenue engines.</h2>
+  <div class="cols-2" style="gap:20px;">
+    <div style="background:var(--teal);border-radius:20px;padding:36px;border-top:4px solid var(--orange);">
+      <div style="font-family:'Playfair Display',serif;font-size:44px;font-weight:800;color:var(--orange);line-height:1;margin-bottom:6px;">01</div>
+      <div class="label-sm" style="color:rgba(255,255,255,0.4);margin-bottom:16px;">Transaction Fees</div>
+      <p style="font-size:13.5px;color:rgba(255,255,255,0.72);line-height:1.65;margin-bottom:16px;">A percentage fee on every sale. Aligned incentives — we only earn when sellers sell. Scales with GMV automatically.</p>
+      <p style="font-size:12px;font-weight:600;color:var(--orange-light);">Zero upfront cost to sellers. Only pay on results.</p>
+    </div>
+    <div style="background:var(--orange);border-radius:20px;padding:36px;border-top:4px solid #fff;">
+      <div style="font-family:'Playfair Display',serif;font-size:44px;font-weight:800;color:#fff;line-height:1;margin-bottom:6px;">02</div>
+      <div class="label-sm" style="color:rgba(255,255,255,0.55);margin-bottom:16px;">Loyaltie+</div>
+      <p style="font-size:13.5px;color:rgba(255,255,255,0.9);line-height:1.65;margin-bottom:16px;">Buyer membership: free shipping, exclusive maker deals, early access, loyalty status &amp; physical milestone rewards.</p>
+      <p style="font-size:12px;font-weight:700;color:var(--teal);">Predictable recurring revenue. Higher AOV. Lower churn. Compounding LTV.</p>
+    </div>
+  </div>
+  <div style="margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+    <div class="card" style="text-align:center;padding:18px 14px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;color:var(--muted);margin-bottom:6px;">TODAY · 517 BUYERS</div>
+      <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:var(--orange);">$6.0K</div>
+      <div style="font-size:11px;color:var(--muted);">Txn + L+ (50%)/mo</div>
+    </div>
+    <div class="card" style="text-align:center;padding:18px 14px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;color:var(--muted);margin-bottom:6px;">MONTH 6 · 6K BUYERS</div>
+      <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:var(--orange);">$77K</div>
+      <div style="font-size:11px;color:var(--muted);">Combined monthly · $924K/yr</div>
+    </div>
+    <div class="card" style="text-align:center;padding:18px 14px;border-top:3px solid var(--orange);">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;color:var(--orange);margin-bottom:6px;">MONTH 12 · 12K BUYERS</div>
+      <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:var(--orange);">$154K</div>
+      <div style="font-size:11px;color:var(--muted);">$1.85M annual run rate</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ S8: PROJECTIONS ═══════ -->
+<section class="slide slide-dark" data-nav="dark" data-label="Projections">
+  <div class="dc" style="width:280px;height:280px;background:rgba(220,84,30,0.07);top:-50px;right:-50px;"></div>
+  <div class="eyebrow eyebrow-dim">Revenue Model — 1,000 New Buyers / Month</div>
+  <h2 class="display d-md c-white" style="margin-bottom:6px;">Revenue compounds as buyers accumulate.</h2>
+  <p style="font-size:11.5px;font-style:italic;color:rgba(255,255,255,0.35);margin-bottom:18px;">Each cohort of 1,000 buyers yields: <strong style="color:rgba(255,255,255,0.6);">1,000 × $40 × 8 × 20%</strong> = $64K txn fees &nbsp;+&nbsp; <strong style="color:rgba(255,255,255,0.6);">1,000 × 50% × $15 × 12</strong> = $90K Loyaltie+ &nbsp;=&nbsp; <strong style="color:var(--orange);">$154K / cohort / year</strong></p>
+
+  <div style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:20px;align-items:start;">
+
+    <!-- Monthly table -->
+    <div class="card-dark" style="border-top:3px solid var(--teal-mid);padding:18px 16px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px;">Monthly Revenue Accumulation</div>
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.12);">
+            <th style="text-align:left;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);">Mo</th>
+            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);">Buyers</th>
+            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);">GMV</th>
+            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);">Txn 20%</th>
+            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-light);">L+ Rev</th>
+            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);">Total/mo</th>
+            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);">Annual</th>
+          </tr>
+        </thead>
+        <tbody id="projTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Right: summary + assumptions -->
+    <div style="display:flex;flex-direction:column;gap:12px;">
+
+      <div class="card-dark" style="border-top:3px solid var(--orange);padding:18px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;">Year 1 Summary</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--orange);">$2.08M</div>
+            <div style="font-size:9.5px;color:rgba(255,255,255,0.38);margin-top:3px;">Total GMV</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--orange);">$1.0M</div>
+            <div style="font-size:9.5px;color:rgba(255,255,255,0.38);margin-top:3px;">Total Revenue Y1</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--orange);">$416K</div>
+            <div style="font-size:9.5px;color:rgba(255,255,255,0.38);margin-top:3px;">Txn Fees Y1</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--orange);">$585K</div>
+            <div style="font-size:9.5px;color:rgba(255,255,255,0.38);margin-top:3px;">Loyaltie+ Y1</div>
+          </div>
+        </div>
+        <div style="padding:12px 14px;background:var(--orange);border-radius:9px;text-align:center;">
+          <div style="font-size:9.5px;font-weight:700;letter-spacing:0.15em;color:rgba(255,255,255,0.65);margin-bottom:3px;">MONTH 12 ANNUAL RUN RATE</div>
+          <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:800;color:#fff;line-height:1.1;">$1.85M / yr</div>
+        </div>
+      </div>
+
+      <div class="card-dark" style="padding:15px 18px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:9px;">Assumptions</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.48);line-height:1.95;">
+          📦 &nbsp;1,000 new buyers acquired / month<br>
+          💳 &nbsp;$40 AOV &nbsp;·&nbsp; 8 orders / buyer / year<br>
+          💰 &nbsp;20% transaction fee on all GMV<br>
+          ⭐ &nbsp;50% join Loyaltie+ at $15 / month<br>
+          📊 &nbsp;All prior cohorts keep buying each month
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ S10: RETENTION ═══════ -->
+<section class="slide slide-dark" data-nav="dark" data-label="Retention">
+  <div class="dc" style="width:280px;height:280px;background:rgba(220,84,30,0.07);top:-50px;right:-50px;"></div>
+  <div class="eyebrow eyebrow-dim">Retention</div>
+  <h2 class="display d-md c-white" style="margin-bottom:28px;">Repeat buyers spend<br><em class="c-orange">6.7× more.</em> Every time.</h2>
+  <div class="cols-2" style="gap:40px;">
+    <div>
+      <div class="label-sm" style="color:rgba(255,255,255,0.35);margin-bottom:12px;">Order Frequency · 517 Buyers</div>
+      <div class="ltv-row"><div class="ltv-lbl">1 order</div><div class="ltv-track"><div class="ltv-fill" style="width:88.2%;background:var(--muted);"><span class="ltv-pct">88.2%</span><span class="ltv-badge">LTV $45</span></div></div><div class="ltv-aside">456</div></div>
+      <div class="ltv-row"><div class="ltv-lbl">2 orders</div><div class="ltv-track"><div class="ltv-fill" style="width:8.7%;background:var(--teal-mid);min-width:80px;"><span class="ltv-pct">8.7%</span><span class="ltv-badge">LTV $98</span></div></div><div class="ltv-aside">45</div></div>
+      <div class="ltv-row"><div class="ltv-lbl">3 orders</div><div class="ltv-track"><div class="ltv-fill" style="width:1.9%;background:var(--orange);min-width:80px;"><span class="ltv-pct">1.9%</span><span class="ltv-badge">LTV $171</span></div></div><div class="ltv-aside">10</div></div>
+      <div class="ltv-row"><div class="ltv-lbl">4+ orders</div><div class="ltv-track"><div class="ltv-fill" style="width:1.2%;background:#B84010;min-width:80px;"><span class="ltv-pct">1.2%</span><span class="ltv-badge">LTV $222</span></div></div><div class="ltv-aside">6</div></div>
+      <p style="margin-top:14px;font-size:11px;font-style:italic;color:rgba(255,255,255,0.3);">88% of buyers only ordered once — and they still came back to explore. That's our biggest opportunity, and exactly what Loyaltie+ converts.</p>
+    </div>
+    <div>
+      <div style="display:flex;align-items:center;gap:16px;background:var(--dark);border-radius:12px;padding:18px 22px;margin-bottom:14px;">
+        <div><div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:var(--muted);">$45</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">1-order LTV</div></div>
+        <div style="font-size:22px;color:rgba(255,255,255,0.25);">→</div>
+        <div><div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:var(--orange);">$300</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">5+ orders LTV</div></div>
+        <div style="margin-left:auto;text-align:right;"><div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:var(--orange);">6.7×</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">LTV multiplier</div></div>
+      </div>
+      <div class="card-dark card-l" style="margin-bottom:12px;padding:14px 18px;">
+        <div style="font-size:12px;color:rgba(255,255,255,0.55);">Top 11% of buyers (&gt;$100 spend)</div>
+        <div style="font-size:17px;font-weight:800;color:var(--orange);">drive 32% of all GMV</div>
+      </div>
+      <div class="label-sm" style="color:rgba(255,255,255,0.3);margin-bottom:10px;margin-top:14px;">How We Retain</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:2;">
+        📧 &nbsp;8-email post-purchase sequence (maker-voice)<br>
+        🤖 &nbsp;Replenishment agent predicts reorder window<br>
+        💌 &nbsp;Winback flows at 30 / 60 / 90 days<br>
+        ⭐ &nbsp;Loyaltie+ converts explorers into committed regulars
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ S11: DIFFERENTIATION ═══════ -->
+<section class="slide slide-light" data-nav="light" data-label="Why Loyaltie">
+  <div class="eyebrow">Differentiation</div>
+  <h2 class="display d-md c-teal" style="margin-bottom:32px;">Not another marketplace.</h2>
+  <table class="ct">
+    <thead>
+      <tr>
+        <th style="width:14%;">Platform</th>
+        <th style="width:37%;">Their Position</th>
+        <th style="width:49%;">Why Loyaltie is Different</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ct-name">Thrive Market</td>
+        <td class="ct-their">Membership-based health &amp; wellness marketplace. Curated, but brand-controlled wholesale model. Not D2C.</td>
+        <td class="ct-ours">Loyaltie is fully D2C — buyers buy directly from makers, not via wholesale distribution. Every purchase goes to the real brand behind it.</td>
+      </tr>
+      <tr>
+        <td class="ct-name">Etsy</td>
+        <td class="ct-their">One-time handmade and craft purchases. Gifting-first market. No recurring purchase tools.</td>
+        <td class="ct-ours">Loyaltie is the only D2C marketplace built for repeat purchases. Subscription plans are native. Regulars, not one-time buyers.</td>
+      </tr>
+      <tr>
+        <td class="ct-name">Amazon</td>
+        <td class="ct-their">Cheap. Fast. Faceless. Scale above everything. Seller is invisible.</td>
+        <td class="ct-ours">Human commerce. You know the maker. Every product has a face, a story, a location.</td>
+      </tr>
+      <tr>
+        <td class="ct-name">Shopify</td>
+        <td class="ct-their">Individual brand stores. The buyer must already know the brand to find it.</td>
+        <td class="ct-ours">A discovery marketplace. Buyers find brands they've never heard of. 420+ independent brands in one place.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top:24px;text-align:center;">
+    <p style="font-size:14px;font-style:italic;font-family:'Playfair Display',serif;color:var(--orange);">The only D2C marketplace where buyers discover independent brands — and make them their regulars.</p>
+  </div>
+</section>
+
+<!-- ═══════ S12: FUTURE ═══════ -->
+<section class="slide slide-dark" data-nav="dark" data-label="Future">
+  <div class="dc" style="width:380px;height:380px;background:rgba(220,84,30,0.06);top:-80px;right:-80px;"></div>
+  <div class="eyebrow eyebrow-dim">Future Vision</div>
+  <h2 class="display d-lg c-white" style="margin-bottom:28px;">Local commerce,<br><em class="c-orange">fully agentic.</em></h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
+    <div class="card-dark" style="border-radius:14px;padding:22px;border-left:4px solid var(--orange);">
+      <div style="font-size:20px;margin-bottom:8px;">🤖</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:5px;">Agentic Shopping</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.48);line-height:1.55;">AI recommends your next purchase before you think to ask — based on habits, household, and timing.</div>
+    </div>
+    <div class="card-dark" style="border-radius:14px;padding:22px;border-left:4px solid var(--orange);">
+      <div style="font-size:20px;margin-bottom:8px;">📱</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:5px;">Social Commerce</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.48);line-height:1.55;">Full transactions via Instagram, WhatsApp &amp; Facebook DMs. No app switch. Discovery where people are.</div>
+    </div>
+    <div class="card-dark" style="border-radius:14px;padding:22px;border-left:4px solid var(--orange);">
+      <div style="font-size:20px;margin-bottom:8px;">🔮</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:5px;">Predictive Replenishment</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.48);line-height:1.55;">Products arrive before you run low. Zero friction re-ordering. Making local buying as reliable as Amazon.</div>
+    </div>
+    <div class="card-dark" style="border-radius:14px;padding:22px;border-left:4px solid var(--orange);">
+      <div style="font-size:20px;margin-bottom:8px;">🌍</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:5px;">Personalised Discovery</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.48);line-height:1.55;">Every buyer gets a curated feed of independent brands matched to their lifestyle — not search-driven.</div>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:11px;font-style:italic;color:rgba(255,255,255,0.28);">May 2026: Loyaltie moves to fully agentic development. Every feature built by AI. Shipped faster than any human team.</p>
+</section>
+
+<!-- ═══════ S13: TEAM ═══════ -->
+<section class="slide slide-light" data-nav="light" data-label="Team">
+  <div class="eyebrow">The Team</div>
+  <h2 class="display d-md c-teal" style="margin-bottom:36px;">The people behind Loyaltie.</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
+    <div style="background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,55,57,0.06);">
+      <div style="height:140px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:30px;">📷</div>
+      <div style="padding:16px;">
+        <div style="height:13px;background:var(--border);border-radius:4px;margin-bottom:8px;"></div>
+        <div style="height:10px;background:var(--orange-pale);border-radius:4px;width:65%;"></div>
+      </div>
+    </div>
+    <div style="background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,55,57,0.06);">
+      <div style="height:140px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:30px;">📷</div>
+      <div style="padding:16px;">
+        <div style="height:13px;background:var(--border);border-radius:4px;margin-bottom:8px;"></div>
+        <div style="height:10px;background:var(--orange-pale);border-radius:4px;width:65%;"></div>
+      </div>
+    </div>
+    <div style="background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,55,57,0.06);">
+      <div style="height:140px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:30px;">📷</div>
+      <div style="padding:16px;">
+        <div style="height:13px;background:var(--border);border-radius:4px;margin-bottom:8px;"></div>
+        <div style="height:10px;background:var(--orange-pale);border-radius:4px;width:65%;"></div>
+      </div>
+    </div>
+    <div style="background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,55,57,0.06);">
+      <div style="height:140px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:30px;">📷</div>
+      <div style="padding:16px;">
+        <div style="height:13px;background:var(--border);border-radius:4px;margin-bottom:8px;"></div>
+        <div style="height:10px;background:var(--orange-pale);border-radius:4px;width:65%;"></div>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:12px;font-style:italic;color:var(--muted);margin-top:24px;">Team details coming soon.</p>
+</section>
+
+<!-- ═══════ S14: CLOSING ═══════ -->
+<section class="slide slide-dark" data-nav="dark" data-label="Close">
+  <div class="left-rule"></div>
+  <div class="dc" style="width:480px;height:480px;background:rgba(26,82,84,0.42);top:-140px;right:-110px;"></div>
+  <div class="dc" style="width:220px;height:220px;background:rgba(220,84,30,0.09);bottom:-50px;left:-40px;"></div>
+  <div style="position:relative;z-index:2;max-width:820px;">
+    <div style="font-size:10px;font-weight:800;letter-spacing:0.3em;color:var(--orange);text-transform:uppercase;margin-bottom:26px;">LOYALTIE</div>
+    <h1 class="display d-lg c-white" style="line-height:1.14;margin-bottom:36px;">
+      The quality of buying local.<br>
+      The joy of buying directly.<br>
+      The confidence of <em class="c-orange">Loyaltie</em>.
+    </h1>
+    <div class="rule-o"></div>
+    <p style="font-size:17px;font-weight:700;color:var(--orange);font-family:'Playfair Display',serif;font-style:italic;margin-bottom:14px;">Buy local, wherever you are.</p>
+    <p style="font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:0.05em;">loyaltie.com &nbsp;·&nbsp; Confidential · Loyaltie Team</p>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- ═══════ BOTTOM NAV ═══════ -->
+<div id="nav" class="dark">
+  <span id="navLeft" class="nav-left">Confidential · Loyaltie Team</span>
+  <div class="nav-center">
+    <button class="nav-arrow" id="prevBtn" onclick="go(-1)">&#8592;</button>
+    <div class="nav-dots" id="dots"></div>
+    <button class="nav-arrow" id="nextBtn" onclick="go(1)">&#8594;</button>
+    <span id="navCounter" style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);margin-left:10px;min-width:32px;">1 / 14</span>
+  </div>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const dots = document.getElementById('dots');
+const nav = document.getElementById('nav');
+const navLeft = document.getElementById('navLeft');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const counter = document.getElementById('navCounter');
+let cur = 0;
+
+// Build dots
+slides.forEach((_, i) => {
+  const d = document.createElement('button');
+  d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dots.appendChild(d);
+});
+
+function goTo(n) {
+  slides[cur].classList.remove('active');
+  cur = Math.max(0, Math.min(n, slides.length - 1));
+  slides[cur].classList.add('active');
+  // dots
+  Array.from(dots.children).forEach((d, i) => {
+    d.classList.toggle('active', i === cur);
+    d.classList.toggle('nav-dot-light', navMode() === 'light');
+  });
+  // nav style
+  const mode = navMode();
+  nav.className = mode === 'light' ? 'light' : 'dark';
+  navLeft.className = mode === 'light' ? 'nav-left nav-left-light' : 'nav-left';
+  prevBtn.className = mode === 'light' ? 'nav-arrow nav-arrow-light' : 'nav-arrow';
+  nextBtn.className = mode === 'light' ? 'nav-arrow nav-arrow-light' : 'nav-arrow';
+  counter.style.color = mode === 'light' ? 'var(--muted)' : 'rgba(255,255,255,0.4)';
+  counter.textContent = `${cur + 1} / ${slides.length}`;
+  prevBtn.style.opacity = cur === 0 ? '0.3' : '1';
+  nextBtn.style.opacity = cur === slides.length - 1 ? '0.3' : '1';
+}
+
+function navMode() { return slides[cur].dataset.nav || 'dark'; }
+function go(d) { goTo(cur + d); }
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'Space') { e.preventDefault(); go(1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); go(-1); }
+});
+
+// Touch swipe
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+document.addEventListener('touchend',   e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); });
+
+// CAC Phase 1 bars — Jan to Mar only
+const cacP1Data = [
+  { mon: 'Jan', val: 229, best: false },
+  { mon: 'Feb', val: 175, best: false },
+  { mon: 'Mar', val: 115, best: true  },
+];
+const wrap1 = document.getElementById('cacP1');
+if (wrap1) cacP1Data.forEach(d => {
+  const h = Math.round((d.val / 229) * 58);
+  const col = document.createElement('div');
+  col.style.cssText = 'display:flex;flex-direction:column;align-items:center;flex:1;';
+  col.innerHTML = `
+    <div style="font-size:9px;font-weight:700;color:${d.best?'var(--orange)':'var(--teal)'};margin-bottom:2px;">$${d.val}</div>
+    <div style="width:100%;height:${h}px;background:${d.best?'var(--orange)':'var(--teal)'};border-radius:4px 4px 0 0;position:relative;">
+      ${d.best ? '<div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);background:var(--orange);color:#fff;font-size:7px;font-weight:800;padding:1px 5px;border-radius:3px;white-space:nowrap;">★ BEST</div>' : ''}
+    </div>
+    <div style="font-size:9px;font-weight:600;color:var(--muted);margin-top:4px;">${d.mon}</div>
+  `;
+  wrap1.appendChild(col);
+});
+
+// CAC Phase 2 bars — Apr + May
+const cacP2Data = [
+  { mon: 'Apr', val: 213, note: 'New funnels' },
+  { mon: 'May', val: 185, note: '↓ improving' },
+];
+const wrap2 = document.getElementById('cacP2');
+if (wrap2) cacP2Data.forEach(d => {
+  const maxH = 40;
+  const h = Math.round((d.val / 213) * maxH);
+  const col = document.createElement('div');
+  col.style.cssText = 'display:flex;flex-direction:column;align-items:center;flex:1;';
+  col.innerHTML = `
+    <div style="font-size:9px;font-weight:700;color:var(--teal);margin-bottom:2px;">$${d.val}</div>
+    <div style="width:100%;height:${h}px;background:var(--orange);border-radius:4px 4px 0 0;opacity:${d.mon==='May'?'1':'0.6'};"></div>
+    <div style="font-size:9px;font-weight:600;color:var(--muted);margin-top:4px;">${d.mon}</div>
+    <div style="font-size:8px;color:var(--orange);margin-top:1px;">${d.note}</div>
+  `;
+  wrap2.appendChild(col);
+});
+
+// Revenue projection table — 20% txn fee, cohort model
+// Each cohort of 1,000 contributes per month: txn $5,333 + L+ $7,500 = $12,833
+// Month N has N cohorts
+const projData = [
+  { mo:1,  buyers:1000,  gmv:26667,  txn:5333,  plus:7500,  total:12833,  ann:154000  },
+  { mo:2,  buyers:2000,  gmv:53333,  txn:10667, plus:15000, total:25667,  ann:308000  },
+  { mo:3,  buyers:3000,  gmv:80000,  txn:16000, plus:22500, total:38500,  ann:462000  },
+  { mo:4,  buyers:4000,  gmv:106667, txn:21333, plus:30000, total:51333,  ann:616000  },
+  { mo:5,  buyers:5000,  gmv:133333, txn:26667, plus:37500, total:64167,  ann:770000  },
+  { mo:6,  buyers:6000,  gmv:160000, txn:32000, plus:45000, total:77000,  ann:924000  },
+  { mo:7,  buyers:7000,  gmv:186667, txn:37333, plus:52500, total:89833,  ann:1078000 },
+  { mo:8,  buyers:8000,  gmv:213333, txn:42667, plus:60000, total:102667, ann:1232000 },
+  { mo:9,  buyers:9000,  gmv:240000, txn:48000, plus:67500, total:115500, ann:1386000 },
+  { mo:10, buyers:10000, gmv:266667, txn:53333, plus:75000, total:128333, ann:1540000 },
+  { mo:11, buyers:11000, gmv:293333, txn:58667, plus:82500, total:141167, ann:1694000 },
+  { mo:12, buyers:12000, gmv:320000, txn:64000, plus:90000, total:154000, ann:1848000 },
+];
+const tbody = document.getElementById('projTableBody');
+if (tbody) {
+  projData.forEach(d => {
+    const isLast = d.mo === 12;
+    const tr = document.createElement('tr');
+    tr.style.cssText = `border-bottom:1px solid rgba(255,255,255,${isLast?'0.18':'0.05'});${isLast?'background:rgba(220,84,30,0.1);':''}`;
+    const fmt = n => n >= 1000000 ? '$' + (n/1000000).toFixed(2) + 'M' : '$' + Math.round(n/1000) + 'K';
+    tr.innerHTML = `
+      <td style="padding:4px 5px;font-size:11px;font-weight:${isLast?'800':'500'};color:${isLast?'var(--orange)':'rgba(255,255,255,0.5)'};">Mo ${d.mo}</td>
+      <td style="text-align:right;padding:4px 5px;font-size:11px;color:${isLast?'#fff':'rgba(255,255,255,0.65)'};">${(d.buyers/1000).toFixed(0)}K</td>
+      <td style="text-align:right;padding:4px 5px;font-size:11px;color:rgba(255,255,255,0.45);">${fmt(d.gmv)}</td>
+      <td style="text-align:right;padding:4px 5px;font-size:11px;color:rgba(255,255,255,0.65);">${fmt(d.txn)}</td>
+      <td style="text-align:right;padding:4px 5px;font-size:11px;color:var(--orange-light);">${fmt(d.plus)}</td>
+      <td style="text-align:right;padding:4px 5px;font-size:11px;font-weight:700;color:${isLast?'var(--orange)':'#fff'};">${fmt(d.total)}</td>
+      <td style="text-align:right;padding:4px 5px;font-size:11px;font-weight:${isLast?'800':'600'};color:${isLast?'var(--orange)':'rgba(255,255,255,0.45)'};">${fmt(d.ann)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  // Year 1 totals row
+  const trTot = document.createElement('tr');
+  trTot.style.cssText = 'border-top:2px solid rgba(220,84,30,0.5);';
+  trTot.innerHTML = `
+    <td colspan="2" style="padding:7px 5px;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);">Year 1 Total</td>
+    <td style="text-align:right;padding:7px 5px;font-size:11px;color:rgba(255,255,255,0.45);">$2.08M</td>
+    <td style="text-align:right;padding:7px 5px;font-size:11px;font-weight:700;color:#fff;">$416K</td>
+    <td style="text-align:right;padding:7px 5px;font-size:11px;font-weight:700;color:var(--orange-light);">$585K</td>
+    <td style="text-align:right;padding:7px 5px;font-size:12px;font-weight:800;color:var(--orange);">$1.0M</td>
+    <td style="text-align:right;padding:7px 5px;font-size:12px;font-weight:800;color:var(--orange);">$1.85M</td>
+  `;
+  tbody.appendChild(trTot);
+}
+
+goTo(0);
+</script>
+</body>
+</html>
