@@ -599,75 +599,108 @@ body {
 
 <!-- ═══════ S8: PROJECTIONS ═══════ -->
 <section class="slide slide-dark" data-nav="dark" data-label="Projections">
-  <div class="dc" style="width:280px;height:280px;background:rgba(220,84,30,0.07);top:-50px;right:-50px;"></div>
-  <div class="eyebrow eyebrow-dim">Revenue Model — 1,000 New Buyers / Month</div>
-  <h2 class="display d-md c-white" style="margin-bottom:6px;">Revenue compounds as buyers accumulate.</h2>
-  <p style="font-size:11.5px;font-style:italic;color:rgba(255,255,255,0.35);margin-bottom:18px;">Each cohort of 1,000 buyers yields: <strong style="color:rgba(255,255,255,0.6);">1,000 × $40 × 8 × 20%</strong> = $64K txn fees &nbsp;+&nbsp; <strong style="color:rgba(255,255,255,0.6);">1,000 × 50% × $15 × 12</strong> = $90K Loyaltie+ &nbsp;=&nbsp; <strong style="color:var(--orange);">$154K / cohort / year</strong></p>
+  <div class="dc" style="width:260px;height:260px;background:rgba(220,84,30,0.07);top:-40px;right:-40px;"></div>
+  <div class="eyebrow eyebrow-dim">Revenue Model — Real Projections</div>
+  <h2 class="display d-md c-white" style="margin-bottom:4px;">24-month model with churn.</h2>
+  <p style="font-size:11px;font-style:italic;color:rgba(255,255,255,0.32);margin-bottom:16px;">1,000 new buyers/mo · $40 AOV · 8 orders/yr · 10% monthly churn · 50% on Loyaltie+ @ $15/mo · 20% txn fee</p>
 
-  <div style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:20px;align-items:start;">
+  <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:18px;align-items:start;">
 
-    <!-- Monthly table -->
-    <div class="card-dark" style="border-top:3px solid var(--teal-mid);padding:18px 16px;">
-      <div style="font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px;">Monthly Revenue Accumulation</div>
-      <table style="width:100%;border-collapse:collapse;">
+    <!-- 24-month table (every other month shown for space) -->
+    <div class="card-dark" style="border-top:3px solid var(--teal-mid);padding:14px 13px;">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:8px;">Monthly Model (with churn)</div>
+      <table style="width:100%;border-collapse:collapse;" id="projTable24">
         <thead>
-          <tr style="border-bottom:1px solid rgba(255,255,255,0.12);">
-            <th style="text-align:left;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);">Mo</th>
-            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);">Buyers</th>
-            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);">GMV</th>
-            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.28);">Txn 20%</th>
-            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-light);">L+ Rev</th>
-            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);">Total/mo</th>
-            <th style="text-align:right;padding:4px 5px 7px;font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);">Annual</th>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+            <th style="text-align:left;padding:3px 5px 6px;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);">Mo</th>
+            <th style="text-align:right;padding:3px 5px 6px;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);">Active</th>
+            <th style="text-align:right;padding:3px 5px 6px;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);">GMV</th>
+            <th style="text-align:right;padding:3px 5px 6px;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);">Txn Rev</th>
+            <th style="text-align:right;padding:3px 5px 6px;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-light);">L+ Rev</th>
+            <th style="text-align:right;padding:3px 5px 6px;font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange);">Total</th>
           </tr>
         </thead>
-        <tbody id="projTableBody"></tbody>
+        <tbody id="projBody"></tbody>
       </table>
     </div>
 
-    <!-- Right: summary + assumptions -->
+    <!-- Right column: summary + LTV -->
     <div style="display:flex;flex-direction:column;gap:12px;">
 
-      <div class="card-dark" style="border-top:3px solid var(--orange);padding:18px;">
-        <div style="font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;">Year 1 Summary</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;text-align:center;">
-            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--orange);">$2.08M</div>
-            <div style="font-size:9.5px;color:rgba(255,255,255,0.38);margin-top:3px;">Total GMV</div>
-          </div>
-          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;text-align:center;">
-            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--orange);">$1.0M</div>
-            <div style="font-size:9.5px;color:rgba(255,255,255,0.38);margin-top:3px;">Total Revenue Y1</div>
-          </div>
-          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;text-align:center;">
-            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--orange);">$416K</div>
-            <div style="font-size:9.5px;color:rgba(255,255,255,0.38);margin-top:3px;">Txn Fees Y1</div>
-          </div>
-          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;text-align:center;">
-            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--orange);">$585K</div>
-            <div style="font-size:9.5px;color:rgba(255,255,255,0.38);margin-top:3px;">Loyaltie+ Y1</div>
-          </div>
+      <!-- Year 1 vs Year 2 -->
+      <div class="card-dark" style="border-top:3px solid var(--orange);padding:15px 16px;">
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--orange);margin-bottom:10px;">Annual Summary</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+          <div style="font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);grid-column:1/3;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:2px;"></div>
+          <div style="font-size:8.5px;font-weight:700;color:rgba(255,255,255,0.4);text-align:center;padding-bottom:4px;">Year 1</div>
+          <div style="font-size:8.5px;font-weight:700;color:rgba(255,255,255,0.4);text-align:center;padding-bottom:4px;">Year 2</div>
+          <!-- GMV -->
+          <div style="font-size:9px;color:rgba(255,255,255,0.45);padding:5px 0;">Total GMV</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.45);padding:5px 0;border-left:1px solid rgba(255,255,255,0.07);padding-left:8px;"></div>
+          <div style="font-size:12px;font-weight:700;color:#fff;text-align:center;padding:3px 0;">$2.22M</div>
+          <div style="font-size:12px;font-weight:700;color:#fff;text-align:center;padding:3px 0;">$4.07M</div>
+          <!-- Txn rev -->
+          <div style="font-size:9px;color:rgba(255,255,255,0.45);padding:5px 0;margin-top:4px;">Transaction Rev</div><div></div>
+          <div style="font-size:12px;font-weight:700;color:#fff;text-align:center;padding:3px 0;">$443K</div>
+          <div style="font-size:12px;font-weight:700;color:#fff;text-align:center;padding:3px 0;">$814K</div>
+          <!-- L+ rev -->
+          <div style="font-size:9px;color:rgba(255,255,255,0.45);padding:5px 0;margin-top:4px;">Loyaltie+ Rev</div><div></div>
+          <div style="font-size:12px;font-weight:700;color:var(--orange-light);text-align:center;padding:3px 0;">$416K</div>
+          <div style="font-size:12px;font-weight:700;color:var(--orange-light);text-align:center;padding:3px 0;">$763K</div>
         </div>
-        <div style="padding:12px 14px;background:var(--orange);border-radius:9px;text-align:center;">
-          <div style="font-size:9.5px;font-weight:700;letter-spacing:0.15em;color:rgba(255,255,255,0.65);margin-bottom:3px;">MONTH 12 ANNUAL RUN RATE</div>
-          <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:800;color:#fff;line-height:1.1;">$1.85M / yr</div>
+        <!-- Total highlight -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div style="background:var(--orange);border-radius:8px;padding:10px;text-align:center;">
+            <div style="font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:2px;">Total Y1</div>
+            <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:#fff;">$859K</div>
+          </div>
+          <div style="background:var(--orange);border-radius:8px;padding:10px;text-align:center;opacity:0.8;">
+            <div style="font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:2px;">Total Y2</div>
+            <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:#fff;">$1.58M</div>
+          </div>
         </div>
       </div>
 
-      <div class="card-dark" style="padding:15px 18px;">
-        <div style="font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:9px;">Assumptions</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.48);line-height:1.95;">
-          📦 &nbsp;1,000 new buyers acquired / month<br>
-          💳 &nbsp;$40 AOV &nbsp;·&nbsp; 8 orders / buyer / year<br>
-          💰 &nbsp;20% transaction fee on all GMV<br>
-          ⭐ &nbsp;50% join Loyaltie+ at $15 / month<br>
-          📊 &nbsp;All prior cohorts keep buying each month
+      <!-- LTV Analysis -->
+      <div class="card-dark" style="border-top:3px solid var(--teal-mid);padding:15px 16px;">
+        <div style="font-size:8.5px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:10px;">User LTV — Base Case (8 orders/yr)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+          <div style="background:rgba(255,255,255,0.04);border-radius:7px;padding:9px 7px;text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--orange);">$12.83</div>
+            <div style="font-size:8.5px;color:rgba(255,255,255,0.35);margin-top:3px;">Monthly LTV</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:7px;padding:9px 7px;text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--orange);">$154</div>
+            <div style="font-size:8.5px;color:rgba(255,255,255,0.35);margin-top:3px;">Year 1 LTV</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:7px;padding:9px 7px;text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--orange);">$308</div>
+            <div style="font-size:8.5px;color:rgba(255,255,255,0.35);margin-top:3px;">2-Year LTV</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:7px;padding:10px 12px;">
+          <div style="font-size:8.5px;font-weight:700;color:rgba(255,255,255,0.3);margin-bottom:6px;letter-spacing:0.08em;text-transform:uppercase;">Churn-Adjusted Cumulative LTV</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);">2-year LTV per user (with 10% churn)</div>
+            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--orange);">$190</div>
+          </div>
+          <div style="font-size:9.5px;color:rgba(255,255,255,0.28);margin-top:5px;font-style:italic;">Txn rev unaffected by churn · L+ revenue churn-adjusted</div>
+        </div>
+      </div>
+
+      <!-- Assumptions -->
+      <div class="card-dark" style="padding:11px 14px;">
+        <div style="font-size:9px;color:rgba(255,255,255,0.4);line-height:1.85;">
+          📦 &nbsp;1,000 new buyers / month &nbsp;·&nbsp; $40 AOV<br>
+          🔄 &nbsp;8 orders / yr &nbsp;·&nbsp; 10% monthly churn<br>
+          ⭐ &nbsp;50% on Loyaltie+ @ $15/mo &nbsp;·&nbsp; 20% txn fee
         </div>
       </div>
 
     </div>
   </div>
 </section>
+
 
 <!-- ═══════ S10: RETENTION ═══════ -->
 <section class="slide slide-dark" data-nav="dark" data-label="Retention">
@@ -940,50 +973,59 @@ if (wrap2) cacP2Data.forEach(d => {
 // Revenue projection table — 20% txn fee, cohort model
 // Each cohort of 1,000 contributes per month: txn $5,333 + L+ $7,500 = $12,833
 // Month N has N cohorts
-const projData = [
-  { mo:1,  buyers:1000,  gmv:26667,  txn:5333,  plus:7500,  total:12833,  ann:154000  },
-  { mo:2,  buyers:2000,  gmv:53333,  txn:10667, plus:15000, total:25667,  ann:308000  },
-  { mo:3,  buyers:3000,  gmv:80000,  txn:16000, plus:22500, total:38500,  ann:462000  },
-  { mo:4,  buyers:4000,  gmv:106667, txn:21333, plus:30000, total:51333,  ann:616000  },
-  { mo:5,  buyers:5000,  gmv:133333, txn:26667, plus:37500, total:64167,  ann:770000  },
-  { mo:6,  buyers:6000,  gmv:160000, txn:32000, plus:45000, total:77000,  ann:924000  },
-  { mo:7,  buyers:7000,  gmv:186667, txn:37333, plus:52500, total:89833,  ann:1078000 },
-  { mo:8,  buyers:8000,  gmv:213333, txn:42667, plus:60000, total:102667, ann:1232000 },
-  { mo:9,  buyers:9000,  gmv:240000, txn:48000, plus:67500, total:115500, ann:1386000 },
-  { mo:10, buyers:10000, gmv:266667, txn:53333, plus:75000, total:128333, ann:1540000 },
-  { mo:11, buyers:11000, gmv:293333, txn:58667, plus:82500, total:141167, ann:1694000 },
-  { mo:12, buyers:12000, gmv:320000, txn:64000, plus:90000, total:154000, ann:1848000 },
+// Real 24-month data from spreadsheet (with 10% monthly churn)
+const proj24 = [
+  { mo:1,  active:1000,  gmv:40000,   txn:8000,  plus:7500,  total:15500  },
+  { mo:2,  active:1900,  gmv:76000,   txn:15200, plus:14250, total:29450  },
+  { mo:3,  active:2710,  gmv:108400,  txn:21680, plus:20325, total:42005  },
+  { mo:4,  active:3439,  gmv:137560,  txn:27512, plus:25800, total:53312  },
+  { mo:5,  active:4095,  gmv:163804,  txn:32761, plus:30720, total:63481  },
+  { mo:6,  active:4686,  gmv:187424,  txn:37485, plus:35145, total:72630  },
+  { mo:7,  active:5217,  gmv:208681,  txn:41736, plus:39135, total:80871  },
+  { mo:8,  active:5695,  gmv:227813,  txn:45563, plus:42720, total:88283  },
+  { mo:9,  active:6126,  gmv:245032,  txn:49006, plus:45945, total:94951  },
+  { mo:10, active:6513,  gmv:260529,  txn:52106, plus:48855, total:100961 },
+  { mo:11, active:6862,  gmv:274476,  txn:54895, plus:51465, total:106360 },
+  { mo:12, active:7176,  gmv:287028,  txn:57406, plus:53820, total:111226, yr1:true },
+  { mo:13, active:7458,  gmv:298325,  txn:59665, plus:55935, total:115600 },
+  { mo:14, active:7712,  gmv:308493,  txn:61699, plus:57840, total:119539 },
+  { mo:15, active:7941,  gmv:317644,  txn:63529, plus:59565, total:123094 },
+  { mo:16, active:8147,  gmv:325879,  txn:65176, plus:61095, total:126271 },
+  { mo:17, active:8332,  gmv:333291,  txn:66658, plus:62490, total:129148 },
+  { mo:18, active:8499,  gmv:339962,  txn:67992, plus:63750, total:131742 },
+  { mo:19, active:8649,  gmv:345966,  txn:69193, plus:64875, total:134068 },
+  { mo:20, active:8784,  gmv:351369,  txn:70274, plus:65880, total:136154 },
+  { mo:21, active:8906,  gmv:356232,  txn:71246, plus:66795, total:138041 },
+  { mo:22, active:9015,  gmv:360609,  txn:72122, plus:67620, total:139742 },
+  { mo:23, active:9114,  gmv:364548,  txn:72910, plus:68355, total:141265 },
+  { mo:24, active:9202,  gmv:368093,  txn:73619, plus:69015, total:142634, yr2:true },
 ];
-const tbody = document.getElementById('projTableBody');
-if (tbody) {
-  projData.forEach(d => {
-    const isLast = d.mo === 12;
+
+const projBody = document.getElementById('projBody');
+if (projBody) {
+  const fmt = n => n >= 1000000 ? '$' + (n/1000000).toFixed(2) + 'M' : '$' + Math.round(n/1000) + 'K';
+  proj24.forEach(d => {
+    const isY1 = d.yr1, isY2 = d.yr2;
+    const highlight = isY1 || isY2;
     const tr = document.createElement('tr');
-    tr.style.cssText = `border-bottom:1px solid rgba(255,255,255,${isLast?'0.18':'0.05'});${isLast?'background:rgba(220,84,30,0.1);':''}`;
-    const fmt = n => n >= 1000000 ? '$' + (n/1000000).toFixed(2) + 'M' : '$' + Math.round(n/1000) + 'K';
+    tr.style.cssText = `border-bottom:1px solid rgba(255,255,255,${highlight?'0.15':'0.04'});${highlight?'background:rgba(220,84,30,0.1);':''}`;
     tr.innerHTML = `
-      <td style="padding:4px 5px;font-size:11px;font-weight:${isLast?'800':'500'};color:${isLast?'var(--orange)':'rgba(255,255,255,0.5)'};">Mo ${d.mo}</td>
-      <td style="text-align:right;padding:4px 5px;font-size:11px;color:${isLast?'#fff':'rgba(255,255,255,0.65)'};">${(d.buyers/1000).toFixed(0)}K</td>
-      <td style="text-align:right;padding:4px 5px;font-size:11px;color:rgba(255,255,255,0.45);">${fmt(d.gmv)}</td>
-      <td style="text-align:right;padding:4px 5px;font-size:11px;color:rgba(255,255,255,0.65);">${fmt(d.txn)}</td>
-      <td style="text-align:right;padding:4px 5px;font-size:11px;color:var(--orange-light);">${fmt(d.plus)}</td>
-      <td style="text-align:right;padding:4px 5px;font-size:11px;font-weight:700;color:${isLast?'var(--orange)':'#fff'};">${fmt(d.total)}</td>
-      <td style="text-align:right;padding:4px 5px;font-size:11px;font-weight:${isLast?'800':'600'};color:${isLast?'var(--orange)':'rgba(255,255,255,0.45)'};">${fmt(d.ann)}</td>
+      <td style="padding:3px 4px;font-size:10px;font-weight:${highlight?'800':'400'};color:${highlight?'var(--orange)':'rgba(255,255,255,0.45)'};">M${d.mo}</td>
+      <td style="text-align:right;padding:3px 4px;font-size:10px;color:${highlight?'#fff':'rgba(255,255,255,0.6)'};">${(d.active/1000).toFixed(1)}K</td>
+      <td style="text-align:right;padding:3px 4px;font-size:10px;color:rgba(255,255,255,0.4);">${fmt(d.gmv)}</td>
+      <td style="text-align:right;padding:3px 4px;font-size:10px;color:rgba(255,255,255,0.6);">${fmt(d.txn)}</td>
+      <td style="text-align:right;padding:3px 4px;font-size:10px;color:var(--orange-light);">${fmt(d.plus)}</td>
+      <td style="text-align:right;padding:3px 4px;font-size:10px;font-weight:700;color:${highlight?'var(--orange)':'#fff'};">${fmt(d.total)}</td>
     `;
-    tbody.appendChild(tr);
+    projBody.appendChild(tr);
+    // Year divider rows
+    if (isY1) {
+      const sep = document.createElement('tr');
+      sep.style.cssText = 'background:rgba(0,55,57,0.5);';
+      sep.innerHTML = `<td colspan="6" style="padding:4px 4px;font-size:8px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.3);">← Year 1: $859K total · $2.22M GMV ·  Year 2 →</td>`;
+      projBody.appendChild(sep);
+    }
   });
-  // Year 1 totals row
-  const trTot = document.createElement('tr');
-  trTot.style.cssText = 'border-top:2px solid rgba(220,84,30,0.5);';
-  trTot.innerHTML = `
-    <td colspan="2" style="padding:7px 5px;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);">Year 1 Total</td>
-    <td style="text-align:right;padding:7px 5px;font-size:11px;color:rgba(255,255,255,0.45);">$2.08M</td>
-    <td style="text-align:right;padding:7px 5px;font-size:11px;font-weight:700;color:#fff;">$416K</td>
-    <td style="text-align:right;padding:7px 5px;font-size:11px;font-weight:700;color:var(--orange-light);">$585K</td>
-    <td style="text-align:right;padding:7px 5px;font-size:12px;font-weight:800;color:var(--orange);">$1.0M</td>
-    <td style="text-align:right;padding:7px 5px;font-size:12px;font-weight:800;color:var(--orange);">$1.85M</td>
-  `;
-  tbody.appendChild(trTot);
 }
 
 goTo(0);
