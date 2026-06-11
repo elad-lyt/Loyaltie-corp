@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loyaltie+ — Internal Strategy</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --orange: #DC541E;
+  --teal: #003739;
+  --bg: #F8F6F0;
+  --white: #FFFFFF;
+  --light: #EEE9DF;
+  --muted: #7a7060;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #000;
+  color: var(--teal);
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── SLIDE ENGINE ── */
+.deck {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+.slide.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 200;
+  background: rgba(0,55,57,0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 100px;
+  padding: 10px 20px;
+}
+.nav-dots {
+  display: flex;
+  gap: 8px;
+}
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dot.active { background: var(--orange); width: 20px; border-radius: 4px; }
+.nav-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.nav-btn:hover { color: white; }
+.slide-counter {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* ── SLIDE 1: COVER ── */
+.s1 {
+  background: var(--teal);
+  padding: 80px;
+  justify-content: space-between;
+}
+.s1-top { display: flex; flex-direction: column; gap: 0; }
+.s1-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(220,84,30,0.9);
+  font-weight: 600;
+  margin-bottom: 32px;
+}
+.s1 h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 0.95;
+  letter-spacing: -2px;
+}
+.s1 h1 em { color: var(--orange); font-style: italic; }
+.s1-sub {
+  font-size: 18px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 28px;
+  max-width: 520px;
+  line-height: 1.5;
+}
+.s1-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.s1-meta { font-size: 13px; color: rgba(255,255,255,0.25); }
+.s1-orb {
+  position: absolute;
+  right: -100px; top: -100px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(220,84,30,0.2) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ── SLIDE 2: THE PROBLEM ── */
+.s2 {
+  background: var(--bg);
+  padding: 80px;
+}
+.slide-eyebrow {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--orange);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.slide-h {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4.5vw, 56px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  color: var(--teal);
+  margin-bottom: 48px;
+  max-width: 700px;
+}
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.problem-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 28px;
+  border-left: 3px solid var(--light);
+}
+.problem-card.bad { border-left-color: #FCA5A5; }
+.problem-card .p-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.problem-card .p-stat {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--teal);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.problem-card.bad .p-stat { color: #DC2626; }
+.problem-card p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
+
+/* ── SLIDE 3: WHAT IS LOYALTIE+ ── */
+.s3 { background: var(--teal); padding: 80px; }
+.s3 .slide-h { color: white; }
+.plus-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.plus-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 24px;
+  transition: all 0.2s;
+}
+.plus-card:hover { background: rgba(255,255,255,0.1); }
+.plus-icon { font-size: 28px; margin-bottom: 14px; }
+.plus-card h3 { font-size: 15px; font-weight: 700; color: white; margin-bottom: 8px; }
+.plus-card p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+.plus-card .pill {
+  display: inline-block;
+  background: rgba(220,84,30,0.25);
+  color: #FF8A5C;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ── SLIDE 4: THE VISION ── */
+.s4 { background: var(--bg); padding: 80px; }
+.vision-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.vision-left {}
+.vision-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 0;
+}
+.vision-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--light);
+}
+.vision-item:last-child { border-bottom: none; }
+.vision-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--orange);
+  opacity: 0.6;
+  min-width: 24px;
+  margin-top: 2px;
+}
+.vision-item h4 { font-size: 15px; font-weight: 700; color: var(--teal); margin-bottom: 4px; }
+.vision-item p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.vision-right {
+  background: var(--teal);
+  border-radius: 20px;
+  padding: 36px;
+  color: white;
+}
+.vision-right .vr-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(220,84,30,0.9);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.vision-right blockquote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 700;
+  line-height: 1.4;
+  color: white;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+.vision-right .vr-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+/* ── SLIDE 5: BUSINESS CASE ── */
+.s5 { background: var(--white); padding: 80px; }
+.biz-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 32px;
+}
+.biz-card {
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.biz-card.teal-card { background: var(--teal); color: white; }
+.biz-card.orange-card { background: var(--orange); color: white; }
+.biz-card.light-card { background: var(--bg); border: 1.5px solid var(--light); }
+.biz-card .bc-icon { font-size: 24px; margin-bottom: 16px; }
+.biz-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.biz-card.light-card h3 { color: var(--teal); }
+.biz-card p { font-size: 13px; line-height: 1.6; opacity: 0.75; }
+.biz-card.light-card p { color: var(--muted); opacity: 1; }
+.biz-card .big-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 44px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 8px;
+  opacity: 1;
+}
+
+.math-strip {
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  justify-content: space-between;
+}
+.math-item { text-align: center; flex: 1; }
+.math-item .m-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--teal);
+}
+.math-item .m-val.orange { color: var(--orange); }
+.math-item .m-label { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+.math-arrow {
+  font-size: 20px;
+  color: var(--light);
+  flex-shrink: 0;
+  padding: 0 8px;
+}
+
+/* ── SLIDE 6: NOT LIKE AMAZON ── */
+.s6 { background: var(--teal); padding: 80px; }
+.s6 .slide-h { color: white; max-width: 600px; }
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.compare-col { border-radius: 16px; padding: 28px; }
+.compare-col.them {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.compare-col.us {
+  background: rgba(220,84,30,0.15);
+  border: 1px solid rgba(220,84,30,0.3);
+}
+.compare-col .col-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.compare-col.them .col-title { color: rgba(255,255,255,0.35); }
+.compare-col.us .col-title { color: #FF8A5C; }
+.compare-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
+}
+.compare-row:last-child { border-bottom: none; }
+.compare-col.them .compare-row { color: rgba(255,255,255,0.45); }
+.compare-col.us .compare-row { color: rgba(255,255,255,0.9); }
+.cr-icon { flex-shrink: 0; margin-top: 1px; }
+
+/* ── SLIDE 7: CALL TO ACTION ── */
+.s7 {
+  background: var(--orange);
+  padding: 80px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.s7 h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900;
+  color: white;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  margin-bottom: 24px;
+}
+.s7 h1 em { font-style: italic; color: rgba(255,255,255,0.6); }
+.s7-sub {
+  font-size: 18px;
+  color: rgba(255,255,255,0.75);
+  max-width: 560px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
+}
+.s7-pillars {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.s7-pill {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 100px;
+}
+.s7-anchor {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-style: italic;
+  color: rgba(255,255,255,0.5);
+}
+.s7-orb {
+  position: absolute;
+  left: -150px; bottom: -150px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ── SLIDE 1: COVER ── -->
+  <div class="slide s1 active">
+    <div class="s1-orb"></div>
+    <div class="s1-top">
+      <div class="s1-label">Internal Strategy · 2025</div>
+      <h1>Loyaltie+<br>is the <em>future</em><br>of local<br>commerce.</h1>
+      <p class="s1-sub">Why a membership layer transforms Loyaltie from a marketplace into a movement — and what it means for our business.</p>
+    </div>
+    <div class="s1-bottom">
+      <div class="s1-meta">Confidential · Loyaltie Team</div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 2: THE PROBLEM ── -->
+  <div class="slide s2">
+    <div class="slide-eyebrow">The problem we're solving</div>
+    <div class="slide-h">Our unit economics<br>don't work yet.</div>
+    <div class="two-col">
+      <div class="problem-card bad">
+        <div class="p-label">Current state</div>
+        <div class="p-stat">$100</div>
+        <p>Cost to acquire one buyer. Most marketplaces at our stage spend $80–$150 per user.</p>
+        <div style="margin-top:16px;">
+          <div class="p-stat" style="font-size:32px;">$10</div>
+          <p>Average revenue returned per acquired user today. We're 10× away from breakeven on CAC alone.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="p-label">What needs to change</div>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-top:8px;">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:4px;">More orders per user</div>
+            <div style="font-size:13px;color:var(--muted);">Without recurring commitment, average D2C buyers order 2–3× per year. With one, they order 6–14×.</div>
+          </div>
+          <div style="border-top:1px solid var(--light);padding-top:16px;">
+            <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:4px;">Predictable revenue</div>
+            <div style="font-size:13px;color:var(--muted);">Transaction revenue is volatile. Membership revenue is compounding and forecastable — it changes our funding story entirely.</div>
+          </div>
+          <div style="border-top:1px solid var(--light);padding-top:16px;">
+            <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:4px;">Independence from sellers</div>
+            <div style="font-size:13px;color:var(--muted);">A membership makes our revenue buyer-driven, not seller-driven. We stop being dependent on any single seller category or cohort.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 3: WHAT IS LOYALTIE+ ── -->
+  <div class="slide s3">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">
+      <div class="slide-eyebrow" style="color:#FF8A5C;margin-bottom:0;">What Loyaltie+ is</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);font-weight:500;">50¢ a day · $15/month</div>
+    </div>
+    <div class="slide-h" style="font-size:clamp(22px,3vw,34px);margin-bottom:18px;">Seven things no other<br>local membership offers.</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <div class="plus-card">
+        <div class="plus-icon" style="font-size:20px;margin-bottom:10px;">AI</div>
+        <h3 style="font-size:12px;">AI-Assisted Shopping</h3>
+        <p style="font-size:11px;">A personal assistant that knows your taste and proactively finds what you'd love — before you go looking.</p>
+        <span class="pill" style="font-size:8px;">Instagram · WhatsApp · App</span>
+      </div>
+      <div class="plus-card">
+        <div class="plus-icon" style="font-size:20px;margin-bottom:10px;">🚚</div>
+        <h3 style="font-size:12px;">Free Shipping, Always</h3>
+        <p style="font-size:11px;">No minimums. No thresholds. Every order from every maker ships free. The biggest friction point in local commerce — eliminated.</p>
+        <span class="pill" style="font-size:8px;">#1 Retention Driver</span>
+      </div>
+      <div class="plus-card">
+        <div class="plus-icon" style="font-size:20px;margin-bottom:10px;">🛡️</div>
+        <h3 style="font-size:12px;">Full Refund Guarantee</h3>
+        <p style="font-size:11px;">Every purchase from every maker is backed by Loyaltie. Something wrong? We make it right — fully, every time.</p>
+        <span class="pill" style="font-size:8px;">Every maker. Every order.</span>
+      </div>
+      <div class="plus-card" style="border:1px solid rgba(220,84,30,0.5);position:relative;">
+        <div style="position:absolute;top:-8px;left:12px;background:var(--orange);font-size:8px;font-weight:700;padding:2px 8px;border-radius:4px;color:white;letter-spacing:0.5px;">PHASE 2</div>
+        <div class="plus-icon" style="font-size:20px;margin-bottom:10px;">🎁</div>
+        <h3 style="font-size:12px;">Surprise Samples</h3>
+        <p style="font-size:11px;">Independent brands send free samples directly to members — suggested or as a surprise. Seller-initiated, zero platform cost.</p>
+        <span class="pill" style="font-size:8px;">Physical discovery</span>
+      </div>
+      <div class="plus-card">
+        <div class="plus-icon" style="font-size:20px;margin-bottom:10px;">🤝</div>
+        <h3 style="font-size:12px;">Human to Human</h3>
+        <p style="font-size:11px;">Not human to platform. Interact with the maker directly — ask questions, build a real relationship. AI first, human second line.</p>
+        <span class="pill" style="font-size:8px;">Direct relationship</span>
+      </div>
+      <div class="plus-card">
+        <div class="plus-icon" style="font-size:20px;margin-bottom:10px;">🔄</div>
+        <h3 style="font-size:12px;">Regular & Hassle-Free</h3>
+        <p style="font-size:11px;">Buy on a plan. Never think about reordering. Your favorites arrive automatically, from real makers who know you.</p>
+        <span class="pill" style="font-size:8px;">Buy on a plan</span>
+      </div>
+      <div class="plus-card" style="grid-column:span 2;background:rgba(220,84,30,0.12);border:1px solid rgba(220,84,30,0.3);">
+        <div class="plus-icon" style="font-size:20px;margin-bottom:10px;">🌎</div>
+        <h3 style="font-size:12px;">Your Membership Travels With You</h3>
+        <p style="font-size:11px;">Not limited to brands already on Loyaltie. Every independent brand you buy from online can be part of your membership. Tell us who you buy from — we'll invite them in. Free shipping and purchase protection follow you everywhere you shop local.</p>
+        <span class="pill" style="font-size:8px;">Unlimited · Demand-driven catalog</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 4: THE VISION ── -->
+  <div class="slide s4">
+    <div class="slide-eyebrow">The bigger picture</div>
+    <div class="slide-h">We're not building<br>a feature. We're building<br>a new commerce habit.</div>
+    <div class="vision-row">
+      <ul class="vision-list">
+        <li class="vision-item">
+          <span class="vision-num">01</span>
+          <div>
+            <h4>Local commerce has never had infrastructure</h4>
+            <p>Farmers markets, Instagram stores, small websites — local makers are everywhere but impossible to buy from consistently. Loyaltie+ is the first membership that makes this effortless.</p>
+          </div>
+        </li>
+        <li class="vision-item">
+          <span class="vision-num">02</span>
+          <div>
+            <h4>Membership = identity, not just access</h4>
+            <p>When someone calls themselves a Loyaltie+ member, they're saying something about who they are — what they value, how they shop, who they support. That's a much stronger retention signal than a discount.</p>
+          </div>
+        </li>
+        <li class="vision-item">
+          <span class="vision-num">03</span>
+          <div>
+            <h4>The AI layer compounds over time</h4>
+            <p>Every order teaches the assistant. Every interaction makes it smarter. A member who's been on Loyaltie+ for 6 months has an assistant that genuinely knows them — an asset that doesn't exist anywhere else.</p>
+          </div>
+        </li>
+      </ul>
+      <div class="vision-right">
+        <div class="vr-label">Our north star</div>
+        <blockquote>"The quality of buying local. The joy of buying directly from the brand. The convenience of online shopping. The confidence of Loyaltie backing every purchase. All in one place."</blockquote>
+        <p class="vr-sub">Loyaltie+ is the product that finally delivers on all four parts of this promise simultaneously — for $15/month.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 5: BUSINESS CASE ── -->
+  <div class="slide s5">
+    <div class="slide-eyebrow">Why it fixes our economics</div>
+    <div class="slide-h">Three reasons Loyaltie+<br>changes the business.</div>
+    <div class="biz-grid">
+      <div class="biz-card teal-card">
+        <div class="bc-icon">📈</div>
+        <div class="big-num">6–14×</div>
+        <h3>Order frequency uplift</h3>
+        <p>Members on comparable platforms (Chewy, Grove, Thrive) order 6–14× per year vs 2–3× for non-members. Frequency is the variable that moves LTV the most.</p>
+      </div>
+      <div class="biz-card orange-card">
+        <div class="bc-icon">💰</div>
+        <div class="big-num">$180</div>
+        <h3>Guaranteed annual revenue</h3>
+        <p>A monthly member generates $180/year in membership revenue before a single transaction fee. That number is forecastable, fundable, and completely independent of GMV.</p>
+      </div>
+      <div class="biz-card light-card">
+        <div class="bc-icon">🛡️</div>
+        <h3>Buyer-side independence</h3>
+        <p>Today our revenue depends on sellers staying active and listing products. Loyaltie+ flips this — our core revenue comes from buyers, not sellers. We become extra pro-customer, not seller-biased.</p>
+      </div>
+    </div>
+    <div class="math-strip">
+      <div class="math-item">
+        <div class="m-val">$100</div>
+        <div class="m-label">CAC today</div>
+      </div>
+      <div class="math-arrow">→</div>
+      <div class="math-item">
+        <div class="m-val">$15/mo</div>
+        <div class="m-label">Membership MRR</div>
+      </div>
+      <div class="math-arrow">+</div>
+      <div class="math-item">
+        <div class="m-val">6× orders</div>
+        <div class="m-label">Conservative frequency</div>
+      </div>
+      <div class="math-arrow">=</div>
+      <div class="math-item">
+        <div class="m-val orange">$200–300+</div>
+        <div class="m-label">LTV yr 1 (est.)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 6: NOT AMAZON ── -->
+  <div class="slide s6">
+    <div class="slide-eyebrow" style="color:#FF8A5C;">Why we win</div>
+    <div class="slide-h">Amazon built Prime<br>for scale. We're building<br>Loyaltie+ for people.</div>
+    <div class="compare-grid">
+      <div class="compare-col them">
+        <div class="col-title">Amazon Prime</div>
+        <div class="compare-row"><span class="cr-icon">✗</span><span>Optimized for lowest price, fastest delivery</span></div>
+        <div class="compare-row"><span class="cr-icon">✗</span><span>No human connection to who made the product</span></div>
+        <div class="compare-row"><span class="cr-icon">✗</span><span>Sellers compete on price, race to the bottom</span></div>
+        <div class="compare-row"><span class="cr-icon">✗</span><span>Algorithm decides what you see</span></div>
+        <div class="compare-row"><span class="cr-icon">✗</span><span>No personalization for local, independent brands</span></div>
+        <div class="compare-row"><span class="cr-icon">✗</span><span>Fixed catalog — you can only buy what's already there</span></div>
+      </div>
+      <div class="compare-col us">
+        <div class="col-title">Loyaltie+</div>
+        <div class="compare-row"><span class="cr-icon">✓</span><span>Optimized for quality, relationship, and trust</span></div>
+        <div class="compare-row"><span class="cr-icon">✓</span><span>Every product has a face, a name, a location behind it</span></div>
+        <div class="compare-row"><span class="cr-icon">✓</span><span>Makers compete on craft — no race to the bottom</span></div>
+        <div class="compare-row"><span class="cr-icon">✓</span><span>AI assistant that's genuinely on your side</span></div>
+        <div class="compare-row"><span class="cr-icon">✓</span><span>Built entirely around independent local makers</span></div>
+        <div class="compare-row"><span class="cr-icon">✓</span><span>Demand-driven — want a maker? We onboard them</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 7: CLOSE ── -->
+  <div class="slide s7">
+    <div class="s7-orb"></div>
+    <h1>The membership<br>that makes <em>buying local</em><br>a no-brainer.</h1>
+    <p class="s7-sub">Loyaltie+ is how we close the gap between our mission and our economics — and how we build a business that grows every time a member orders. 50¢ a day. Free shipping on every local brand they love. A membership that travels with them everywhere they shop independent.</p>
+    <div class="s7-pillars">
+      <span class="s7-pill">AI-Assisted</span>
+      <span class="s7-pill">Free Shipping</span>
+      <span class="s7-pill">Human to Human</span>
+      <span class="s7-pill">Buy Directly</span>
+      <span class="s7-pill">Regular & Hassle-Free</span>
+      <span class="s7-pill">Buy From Anyone</span>
+      <span class="s7-pill" style="border-color:rgba(220,84,30,0.5);color:rgba(255,255,255,0.6);">Surprise Samples · Phase 2</span>
+    </div>
+    <div class="s7-anchor">"Buy local, wherever you are."</div>
+  </div>
+
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn" onclick="go(-1)">←</button>
+  <div class="nav-dots" id="dots"></div>
+  <span class="slide-counter" id="counter">1 / 7</span>
+  <button class="nav-btn" onclick="go(1)">→</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const dotsEl = document.getElementById('dots');
+const counter = document.getElementById('counter');
+let cur = 0;
+
+// build dots
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+});
+
+function goTo(n) {
+  slides[cur].classList.remove('active');
+  dotsEl.children[cur].classList.remove('active');
+  cur = (n + slides.length) % slides.length;
+  slides[cur].classList.add('active');
+  dotsEl.children[cur].classList.add('active');
+  counter.textContent = (cur + 1) + ' / ' + slides.length;
+}
+
+function go(dir) { goTo(cur + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+});
+
+// swipe support
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  const diff = tx - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) go(diff > 0 ? 1 : -1);
+});
+</script>
+</body>
+</html>
