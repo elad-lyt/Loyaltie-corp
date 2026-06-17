@@ -98,7 +98,7 @@ body {
 
 /* ── TYPOGRAPHY ── */
 .eyebrow {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.26em;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.26em;
   text-transform: uppercase; color: var(--orange); margin-bottom: 16px;
 }
 .eyebrow-dim { color: rgba(255,255,255,0.4); }
@@ -109,14 +109,14 @@ body {
 .d-xl { font-size: clamp(46px, 6vw, 72px); }
 .d-lg { font-size: clamp(34px, 4.5vw, 52px); }
 .d-md { font-size: clamp(24px, 3vw, 38px); }
-.d-sm { font-size: clamp(20px, 2.5vw, 30px); }
+.d-sm { font-size: clamp(22px, 2.8vw, 34px); }
 .c-white { color: #fff; }
 .c-orange { color: var(--orange); }
 .c-teal { color: var(--teal); }
 .c-muted { color: var(--muted); }
-.body { font-size: 13.5px; line-height: 1.65; color: var(--muted); }
+.body { font-size: 15px; line-height: 1.65; color: var(--muted); }
 .body-white { color: rgba(255,255,255,0.6); }
-.body-sm { font-size: 12px; line-height: 1.6; color: var(--muted); }
+.body-sm { font-size: 13px; line-height: 1.6; color: var(--muted); }
 .label-sm { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
 
 /* ── LAYOUT ── */
@@ -155,9 +155,9 @@ body {
   display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;
 }
 .ci-fill { background: var(--orange); color: #fff; border-color: var(--orange); }
-.ci-title { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 2px; }
+.ci-title { font-size: 14px; font-weight: 700; color: var(--teal); margin-bottom: 2px; }
 .ci-title-w { color: #fff; }
-.ci-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.ci-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
 .ci-desc-w { color: rgba(255,255,255,0.55); }
 
 /* ── VALUE STACK ── */
@@ -180,7 +180,7 @@ body {
   padding: 11px 20px; gap: 16px; margin-bottom: 7px;
 }
 .f-lbl { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; color: #fff; text-transform: uppercase; min-width: 76px; }
-.f-desc { font-size: 12px; color: rgba(255,255,255,0.72); }
+.f-desc { font-size: 13px; color: rgba(255,255,255,0.72); }
 
 /* ── AGENT CARDS ── */
 .agent-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
@@ -189,8 +189,8 @@ body {
   border-top: 3px solid var(--orange);
 }
 .ac-icon { font-size: 20px; margin-bottom: 10px; }
-.ac-title { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-.ac-desc { font-size: 11px; color: rgba(255,255,255,0.48); line-height: 1.5; }
+.ac-title { font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.ac-desc { font-size: 12px; color: rgba(255,255,255,0.48); line-height: 1.5; }
 
 /* ── COMP TABLE ── */
 .ct { width: 100%; border-collapse: collapse; }
@@ -273,32 +273,33 @@ body {
 
 <!-- ═══════ S2: THE PROBLEM ═══════ -->
 <section class="slide slide-light" data-nav="light" data-label="Problem">
-  <div class="dc" style="width:320px;height:320px;background:rgba(220,84,30,0.05);bottom:-60px;right:-60px;"></div>
-  <div class="eyebrow">The Problem</div>
-  <h2 class="display d-lg c-teal" style="margin-bottom:28px;">The way people discover<br>and buy local is broken.</h2>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-    <div class="card card-t" style="padding:22px;">
-      <div style="font-size:22px;margin-bottom:10px;">🏪</div>
-      <h3 style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:7px;">An explosion of independent brands — nowhere to be found</h3>
-      <p class="body-sm">Hundreds of thousands of independent brands and local makers are trying to sell online — Shopify's growth tells the story. But there is no single point of discovery. Those already selling face brutal CAC, no recurring revenue tools, and no platform built to solve it.</p>
+  <div class="dc" style="width:300px;height:300px;background:rgba(220,84,30,0.05);bottom:-60px;right:-60px;"></div>
+  <div class="eyebrow">Why We Built Loyaltie</div>
+  <h2 class="display d-lg c-teal" style="margin-bottom:32px;">Buying local is broken.<br>We're fixing it.</h2>
+
+  <!-- Top row: 2 big pain quotes -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="card card-t" style="padding:24px 26px;">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--teal);line-height:1.35;margin-bottom:10px;">"Every search leads back to Amazon."</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.6;">Hundreds of thousands of independent brands are selling online — but the algorithm buries them. The best makers have the smallest ad budgets. They lose on visibility, not quality.</p>
     </div>
-    <div class="card card-t" style="padding:22px;">
-      <div style="font-size:22px;margin-bottom:10px;">🧡</div>
-      <h3 style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:7px;">Buyers care about local — but convenience wins</h3>
-      <p class="body-sm">People want to buy from real humans. They care about quality and story. But they're not limited to what retailers stock wholesale. They want one place to find it all, with the brands they actually love — not what a retailer decided to carry.</p>
-    </div>
-    <div class="card card-t" style="padding:22px;">
-      <div style="font-size:22px;margin-bottom:10px;">📦</div>
-      <h3 style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:7px;">The market is fragmented — and shipping is the tax</h3>
-      <p class="body-sm">Buying from multiple independent brands today means multiple carts, multiple accounts, multiple shipping fees. If you love a coffee brand in Portland and a skincare brand in Austin, you pay to ship from both — separately. That friction kills the habit. Loyaltie covers shipping across every brand, every order, from one account.</p>
-    </div>
-    <div class="card card-t" style="padding:22px;">
-      <div style="font-size:22px;margin-bottom:10px;">🤖</div>
-      <h3 style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:7px;">Shopping in the AI era is changing</h3>
-      <p class="body-sm">We still want the human connection and the reason to buy — but we expect a simple AI assistant to find and do it for us. Local commerce hasn't caught up. The old shopping experience doesn't fit the way people want to shop today.</p>
+    <div class="card card-t" style="padding:24px 26px;">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--teal);line-height:1.35;margin-bottom:10px;">"You find a great local product — and then lose it forever."</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.6;">No subscription, no easy reorder, no single place to return to. Great discovery with zero follow-through. The habit never forms.</p>
     </div>
   </div>
-  <p style="text-align:center;font-size:12px;font-style:italic;color:var(--muted);margin-top:16px;font-family:'Playfair Display',serif;">The gap between great independent products and the people who want them has never been bigger.</p>
+
+  <!-- Bottom row: 2 more pains -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="card card-t" style="padding:24px 26px;">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--teal);line-height:1.35;margin-bottom:10px;">"You can't tell a real brand from a drop-shipper anymore."</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.6;">Everything says "small batch." Everything looks handmade. There's no face behind most of what we buy — and no way to know what's real.</p>
+    </div>
+    <div class="card card-t" style="padding:24px 26px;">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--teal);line-height:1.35;margin-bottom:10px;">"Shopping with intention shouldn't require this much work."</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.6;">Buying from five brands means five accounts, five shipping fees, five checkouts. People want to buy better — AI should make it effortless, not harder.</p>
+    </div>
+  </div>
 </section>
 
 <!-- ═══════ S3: OUR SOLUTION (buyer-first) ═══════ -->
