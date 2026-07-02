@@ -33,6 +33,24 @@
   .video-frame{position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;background:var(--teal);}
   .video-frame iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
 
+
+  .deck-card{display:block;background:var(--white);border-radius:18px;padding:14px;box-shadow:0 2px 24px rgba(0,55,57,0.07);margin-bottom:14px;text-decoration:none;color:var(--teal);border:1.5px solid transparent;transition:all .18s ease;}
+  .deck-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 6px 28px rgba(0,55,57,0.11);}
+  .deck-cover{background:var(--dark);border-radius:12px;padding:44px 40px 36px;position:relative;overflow:hidden;}
+  .deck-cover::after{content:'';position:absolute;width:260px;height:260px;border-radius:50%;background:rgba(220,84,30,0.09);top:-70px;right:-70px;}
+  .dc-eyebrow{font-size:9.5px;font-weight:800;letter-spacing:0.24em;text-transform:uppercase;color:rgba(248,246,240,0.45);margin-bottom:14px;}
+  .dc-title{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,44px);font-weight:800;line-height:1.06;color:var(--bg);margin-bottom:18px;position:relative;z-index:1;}
+  .dc-title em{color:var(--orange);}
+  .dc-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;position:relative;z-index:1;}
+  .dc-pills span{font-size:9px;font-weight:800;letter-spacing:0.16em;color:rgba(248,246,240,0.75);border:1px solid rgba(248,246,240,0.25);border-radius:20px;padding:5px 12px;}
+  .dc-anchor{font-family:'Caveat',cursive;font-size:18px;color:var(--orange);}
+  .deck-meta{display:flex;justify-content:space-between;align-items:center;padding:16px 12px 6px;}
+  .deck-meta .tag{font-size:9.5px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .deck-meta h3{font-family:'Playfair Display',serif;font-size:21px;font-weight:800;line-height:1.15;margin-bottom:5px;}
+  .deck-meta p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+  .deck-meta .arrow{color:var(--orange);font-size:22px;font-weight:800;transition:transform .18s ease;flex-shrink:0;margin-left:18px;}
+  .deck-card:hover .arrow{transform:translateX(4px);}
+
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:36px;}
   @media(max-width:640px){.grid{grid-template-columns:1fr;}}
 
@@ -69,7 +87,7 @@
   <div class="anchor">Buy local, wherever you are.</div>
 
   <div class="pills">
-    <div class="pill"><b>465</b>&nbsp;purchases in one week</div>
+    <div class="pill"><b>~30 → 465</b>&nbsp;purchases in one week</div>
     <div class="pill"><b>~1,200</b>&nbsp;sign-ups</div>
     <div class="pill"><b>893</b>&nbsp;agentic conversations</div>
     <div class="pill"><b>100+</b>&nbsp;independent stores live</div>
@@ -86,19 +104,24 @@
     </div>
   </div>
 
+  <a class="deck-card" href="https://www.canva.com/design/DAHOCMoKct0/Vl09ZRmbfiS0yYP4QdbMlg/view?utm_content=DAHOCMoKct0" target="_blank" rel="noopener">
+    <div class="deck-cover">
+      <div class="dc-eyebrow">Loyaltie · Investor Deck · 2026</div>
+      <div class="dc-title">Disrupting<br><em>Local Commerce</em></div>
+      <div class="dc-pills"><span>BUY LOCAL</span><span>BUY DIRECT</span><span>BUY HUMAN</span></div>
+      <div class="dc-anchor">Buy local, wherever you are.</div>
+    </div>
+    <div class="deck-meta">
+      <div>
+        <div class="tag">The Deck</div>
+        <h3>Investor Presentation</h3>
+        <p>The full deck — problem, market, traction, unit economics, and the raise.</p>
+      </div>
+      <div class="arrow">→</div>
+    </div>
+  </a>
+
   <div class="grid">
-    <a class="card primary" href="https://www.canva.com/design/DAHOCMoKct0/Vl09ZRmbfiS0yYP4QdbMlg/view?utm_content=DAHOCMoKct0" target="_blank" rel="noopener">
-      <div class="tag">The Deck</div>
-      <h3>Investor Presentation</h3>
-      <p>The full 16-slide deck — problem, market, traction, unit economics, and the raise.</p>
-      <div class="arrow">→</div>
-    </a>
-    <a class="card" href="https://elad-lyt.github.io/Loyaltie-corp/" target="_blank" rel="noopener">
-      <div class="tag">Interactive Version</div>
-      <h3>Web Deck</h3>
-      <p>The same presentation as an interactive web experience — browse slide by slide.</p>
-      <div class="arrow">→</div>
-    </a>
     <a class="card" href="https://loyaltie.com" target="_blank" rel="noopener">
       <div class="tag">Live Product</div>
       <h3>loyaltie.com</h3>
